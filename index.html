@@ -1,105 +1,89 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
   <title>Life Journey with the Chovos Halevavos</title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2487.5">
+
   <style>
     body {
-      font-family: 'Georgia', serif;
-      background-color: #fdfaf6;
-      color: #333;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f2f2f7;
       margin: 0;
       padding: 0;
+      color: #333;
     }
 
-    header {
-      background-color: #e8e1d4;
-      padding: 20px;
+    header, footer {
+      background: #6a5acd;
+      color: white;
+      padding: 1.5rem;
       text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 2.5em;
-      color: #4b3f2f;
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
-    nav {
-      background-color: #d5cbb0;
-      text-align: center;
-      padding: 10px 0;
+    h1, h2 {
+      color: #6a5acd;
+      margin: 0 0 1rem 0;
+      font-family: Georgia, serif;
     }
 
-    nav a, nav .dropdown {
-      color: #4b3f2f;
+    a {
+      color: #6a5acd;
       text-decoration: none;
-      margin: 0 15px;
       font-weight: bold;
-      cursor: pointer;
-      display: inline-block;
-      position: relative;
     }
 
-    nav a:hover, nav .dropdown:hover {
+    a:hover {
       text-decoration: underline;
     }
 
-    /* Dropdown content */
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #fdfaf6;
-      min-width: 180px;
-      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-      padding: 10px 0;
-      z-index: 1;
-      border: 1px solid #d5cbb0;
-      top: 100%;
-      left: 0;
+    .nav-links {
+      text-align: center;
+      margin-bottom: 1rem;
     }
 
-    .dropdown-content a {
-      color: #4b3f2f;
-      padding: 8px 16px;
+    .nav-links a {
+      margin: 0 10px;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 1rem;
+      background: #6a5acd;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
       text-decoration: none;
-      display: block;
-      white-space: nowrap;
+      transition: background 0.3s;
     }
 
-    .dropdown-content a:hover {
-      background-color: #e8e1d4;
+    .button:hover {
+      background: #5947b5;
     }
 
-    /* Show dropdown on hover or focus */
-    .dropdown:hover .dropdown-content,
-    .dropdown:focus-within .dropdown-content {
-      display: block;
+    p {
+      font-family: Georgia, serif;
+      font-size: 14px;
+      color: #483a2e;
+      line-height: 1.6;
+      margin-bottom: 1rem;
     }
 
-    .content {
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 0 20px;
-      text-align: center;
-    }
-
-    .content h2 {
-      color: #5a4b3c;
-    }
-
-    .content p {
-      line-height: 1.7;
-      color: #4b3f2f;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: #e8e1d4;
-      color: #6d6354;
-      font-size: 0.9em;
+    footer p {
+      font-size: 12px;
+      color: #ddd;
+      margin: 0;
     }
   </style>
 </head>
@@ -109,32 +93,29 @@
     <h1>Life Journey with the Chovos Halevavos</h1>
   </header>
 
-  <nav>
+  <nav class="nav-links">
     <a href="index.html">Home</a>
+    <a href="recommended.html">Recommended Reading</a>
     <a href="about.html">About</a>
-
-    <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
-      <a href="shiurim.html" style="color: #4b3f2f; font-weight: bold; text-decoration: none; cursor: pointer;">
-        Shiurim ▼
-      </a>
-      <div class="dropdown-content" role="menu" aria-label="Shiurim submenu">
-        <a href="shaar_ha_bechina.html" role="menuitem">Sha'ar HaBechina</a>
-        <a href="shaar_avodas_haelokim.html" role="menuitem">Sha'ar Avodas HaElokim</a>
-        <a href="shaar_ha_bitachon.html" role="menuitem">Sha'ar HaBitachon</a>
-      </div>
-    </div>
-
+    <a href="blog.html">Blog</a>
     <a href="contact.html">Contact</a>
+    <a href="shiurim.html">Recorded Shiurim</a>
   </nav>
 
-  <div class="content">
-    <h2>Welcome to the Life Journey with the Chovos Halevavos</h2>
-    <p>This website explores the timeless teachings of the Chovos Halevavos, offering inspiration and guidance for the heart and soul.</p>
-    <p>Explore our recorded shiurim, read insightful articles, and join our journey inward with faith and wisdom.</p>
-  </div>
+  <main>
+    <h2>Welcome to My Journey</h2>
+    <p>Join me as I explore the timeless wisdom of the <i>Chovos Halevavos</i>, one section at a time. Together, we'll reflect, internalize, and apply the teachings to everyday life.</p>
+
+    <h2>Latest Reflection: Sha'ar HaBitachon</h2>
+    <p>In this week's post, we begin delving into the powerful ideas of trust in Hashem. What does it really mean to rely on Divine providence in our chaotic world? <a href="latest_reflection.html">Read more →</a></p>
+
+    <h2>Recorded Shiurim</h2>
+    <h3>Introduction to Sha'ar HaBitachon – Part 1</h3>
+    <h3>Introduction to Sha'ar HaBitachon – Part 2</h3>
+  </main>
 
   <footer>
-    © 2025 Life Journey with the Chovos Halevavos. All rights reserved.
+    <p>© 2025 Life Journey with the Chovos Halevavos. All rights reserved.</p>
   </footer>
 
 </body>
