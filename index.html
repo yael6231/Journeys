@@ -1,89 +1,94 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title>Life Journey with the Chovos Halevavos</title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2487.5">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home - Life Journey with the Chovos Halevavos</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f2f2f7;
+      font-family: 'Georgia', serif;
+      background-color: #fdfaf6;
+      color: #333;
       margin: 0;
       padding: 0;
-      color: #333;
     }
 
-    header, footer {
-      background: #6a5acd;
-      color: white;
-      padding: 1.5rem;
+    header {
+      background-color: #e8e1d4;
+      padding: 20px;
       text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    main {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 1.5rem;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+      color: #4b3f2f;
     }
 
-    h1, h2 {
-      color: #6a5acd;
-      margin: 0 0 1rem 0;
-      font-family: Georgia, serif;
+    nav {
+      background-color: #d5cbb0;
+      text-align: center;
+      padding: 10px 0;
     }
 
-    a {
-      color: #6a5acd;
+    nav a {
+      color: #4b3f2f;
       text-decoration: none;
+      margin: 0 15px;
       font-weight: bold;
     }
 
-    a:hover {
+    nav a:hover {
       text-decoration: underline;
     }
 
-    .nav-links {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    .nav-links a {
-      margin: 0 10px;
-    }
-
-    .button {
+    .dropdown {
       display: inline-block;
-      margin-top: 1rem;
-      background: #6a5acd;
-      color: white;
-      padding: 0.6rem 1.2rem;
-      border-radius: 8px;
+      position: relative;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 240px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+
+    .dropdown-content a {
+      color: #333;
+      padding: 10px 16px;
+      display: block;
       text-decoration: none;
-      transition: background 0.3s;
     }
 
-    .button:hover {
-      background: #5947b5;
+    .dropdown-content a:hover {
+      background-color: #eee;
     }
 
-    p {
-      font-family: Georgia, serif;
-      font-size: 14px;
-      color: #483a2e;
-      line-height: 1.6;
-      margin-bottom: 1rem;
+    .dropdown:hover .dropdown-content {
+      display: block;
     }
 
-    footer p {
-      font-size: 12px;
-      color: #ddd;
-      margin: 0;
+    .dropdown > a {
+      color: #4b3f2f;
+      cursor: pointer;
+    }
+
+    .content {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #e8e1d4;
+      color: #6d6354;
+      font-size: 0.9em;
     }
   </style>
 </head>
@@ -93,29 +98,37 @@
     <h1>Life Journey with the Chovos Halevavos</h1>
   </header>
 
-  <nav class="nav-links">
+  <nav>
     <a href="index.html">Home</a>
-    <a href="recommended.html">Recommended Reading</a>
     <a href="about.html">About</a>
-    <a href="blog.html">Blog</a>
     <a href="contact.html">Contact</a>
-    <a href="shiurim.html">Shiurim</a>
+    <div class="dropdown">
+      <a>Shiurim ▾</a>
+      <div class="dropdown-content">
+        <a href="intro-to-shaar-habitachon.html">Sha'ar HaBitachon</a>
+        <a href="shaar-hayichud.html">Sha'ar HaYichud</a>
+        <a href="shaar-habechinah.html">Sha'ar HaBechinah</a>
+        <a href="shaar-avodas-elokim.html">Sha'ar Avodas Elokim</a>
+        <a href="shaar-hakeniah.html">Sha'ar HaKeniah</a>
+        <a href="shaar-cheshbon-hanefesh.html">Sha'ar Cheshbon HaNefesh</a>
+        <a href="shaar-teshuvah.html">Sha'ar Teshuvah</a>
+        <a href="shaar-ahavas-hashem.html">Sha'ar Ahavas Hashem</a>
+      </div>
+    </div>
   </nav>
 
-  <main>
-    <h2>Welcome to The Journey</h2>
-    <p>Join us as we explore the timeless wisdom of the <i>Chovos Halevavos</i>, one section at a time. Together, we'll reflect, internalize, and apply the teachings to everyday life.</p>
-
-    <h2>Latest Reflection: Sha'ar HaBitachon</h2>
-    <p>In this week's post, we begin delving into the powerful ideas of trust in Hashem. What does it really mean to rely on Divine providence in our chaotic world? Reflection on the Purpose of Sha'ar HaBitachon:
-
-Sha'ar HaBitachon serves as a transformative guide to cultivating deep trust in Hashem. Its purpose is to shift one’s reliance away from material security and human strategies, and instead anchor it in the unwavering providence of the Creator. Through calm reason and profound insight, Rabbeinu Bachya demonstrates that true inner peace arises not from controlling the world, but from surrendering to the One who does. This section challenges the reader to examine their fears, ambitions, and dependencies — and gradually replace them with a sense of calm confidence in divine care. In doing so, it not only strengthens one’s emunah but also frees the soul from anxiety, enabling a life of purpose, humility, and spiritual clarity. </p>
-
-
-  </main>
+  <div class="content">
+    <h2>Welcome</h2>
+    <p>
+      Welcome to the Life Journey with the Chovos Halevavos — a site dedicated to exploring the timeless teachings of Rabbeinu Bachya. Through shiurim, reflections, and guided learning, we aim to make the wisdom of the Chovos Halevavos practical and accessible in your daily spiritual journey.
+    </p>
+    <p>
+      Start by exploring <a href="intro-to-shaar-habitachon.html">Sha'ar HaBitachon</a> or browse other Sha'arim using the menu above.
+    </p>
+  </div>
 
   <footer>
-    <p>© 2025 Life Journey with the Chovos Halevavos. All rights reserved.</p>
+    © 2025 Life Journey with the Chovos Halevavos. All rights reserved.
   </footer>
 
 </body>
