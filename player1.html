@@ -5,6 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Fancy Audio Player</title>
   <style>
+    <style>
+  /* Theme override to match site (light, brown, serif) */
+  :root{
+    --bg:#fdfaf6; --panel:#fffefb; --text:#333; --muted:#6d6354;
+    --border:#ddd6c3; --accent:#8b5cf6; --accent-2:#6366f1;
+  }
+  html,body{background:var(--bg) !important; color:var(--text) !important; font-family: Georgia, "Times New Roman", serif !important;}
+  .card{background:var(--panel) !important; border:1px solid var(--border) !important; border-radius:14px !important; box-shadow:0 2px 6px rgba(0,0,0,.05) !important;}
+  .wrap{max-width:900px !important;}
+  .player{gap:16px !important;}
+  .now{padding:16px !important;}
+  .playlist{padding:8px !important; max-height:unset !important;}
+  .cover{background:#faf7ef !important; border:1px dashed var(--border) !important; border-radius:10px !important;}
+  .meta h2{color:#4b3f2f !important; font-weight:700 !important;}
+  .meta p{color:var(--muted) !important;}
+  .btn{background:#faf7ef !important; color:#4b3f2f !important; border:1px solid var(--border) !important; border-radius:999px !important;}
+  .btn.primary{background:linear-gradient(180deg,var(--accent),var(--accent-2)) !important; color:#fff !important; border-color:transparent !important; font-weight:700 !important;}
+  input[type=range]{background:#faf7ef !important; border:1px solid var(--border) !important;}
+  .time,.small,.muted{color:var(--muted) !important;}
+  .track{border-radius:10px !important;}
+  .track:hover{background:#faf7ef !important; border-color:var(--border) !important;}
+  .track.active{background:#f6f1e6 !important; border-color:var(--accent) !important;}
+  .no{background:#faf7ef !important; border:1px solid var(--border) !important; color:var(--muted) !important;}
+</style>
+
     :root{
       --bg:#0f172a;/* slate-900 */
       --panel:#111827ee;/* gray-900 */
