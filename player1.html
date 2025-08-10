@@ -26,6 +26,7 @@
 </style>
 
 </head>
+  <script id="tracks-data" type="application/json"></script>
 <body>
   <div class="wrap">
     <h1 style="margin:0 0 14px">🎧 Fancy Audio Player</h1>
@@ -80,8 +81,7 @@
     // ---------- Configuration ----------
 // Option A (single‑file): we can inline your playlist below in a <script id="tracks-data" type="application/json"> tag
 // Option B (external file): set JSON_PATH to './embedded_tracks.json' and host both files from the same origin
-const JSON_PATH = './embedded_tracks.json'; // change to null to rely only on inline JSON
-
+const JSON_PATH = '/Journeys/embedded_tracks.json?v=2';
     // ---------- Utilities ----------
     const $ = sel => document.querySelector(sel);
     const fmt = s => {
