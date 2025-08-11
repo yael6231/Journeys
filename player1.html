@@ -7,58 +7,218 @@
 <style>
   :root{
     --bg:#fdfaf6; --panel:#fffefb; --text:#333; --muted:#6d6354;
-    --border:#ddd6c3; --accent:#8b5cf6; --accent-2:#6366f1;
+    --border:#ddd6c3; --accent:#8b5cf6; --accent-2:#6366f1; --brand:#4b3f2f;
   }
   html,body{background:var(--bg);color:var(--text);font-family:Georgia,"Times New Roman",serif;margin:0;padding:0}
-  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;box-shadow:0 2px 6px rgba(0,0,0,.05);max-width:900px;margin:20px auto;padding:20px}
-  .playlist{padding:8px;max-height:70vh;overflow-y:auto;}
-  .track{border-radius:10px;padding:8px;display:flex;align-items:center;cursor:pointer;border:1px solid transparent;}
+  header{background:#e8e1d4;padding:18px;text-align:center;box-shadow:0 2px 4px rgba(0,0,0,.06)}
+  header h1{margin:0;color:var(--brand);font-size:26px}
+  .wrap{max-width:960px;margin:24px auto;padding:0 16px}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;box-shadow:0 2px 6px rgba(0,0,0,.05);padding:16px}
+  .grid{display:grid;grid-template-columns:360px 1fr;gap:16px}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}}
+  .now{display:flex;flex-direction:column;gap:10px}
+  .cover{width:100%;aspect-ratio:1/1;border:1px dashed var(--border);border-radius:10px;display:grid;place-items:center;background:#faf7ef;color:var(--brand)}
+  .meta .t{margin:0;color:var(--brand);font-weight:700;font-size:18px}
+  .meta .a{margin:2px 0 0;color:var(--muted);font-size:14px}
+  .controls{display:grid;gap:10px}
+  .row{display:flex;align-items:center;gap:8px}
+  .btn{appearance:none;border:1px solid var(--border);background:#faf7ef;color:var(--brand);padding:8px 12px;border-radius:999px;cursor:pointer}
+  .btn.primary{background:linear-gradient(180deg,var(--accent),var(--accent-2));color:#fff;border-color:transparent;font-weight:700}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;background:#faf7ef;border:1px solid var(--border);border-radius:999px}
+  input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);border:0}
+  .time{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px}
+  .playlist{padding:6px;max-height:70vh;overflow:auto}
+  .track{display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:center;padding:10px;border-radius:10px;border:1px solid transparent;cursor:pointer}
   .track:hover{background:#faf7ef;border-color:var(--border)}
   .track.active{background:#f6f1e6;border-color:var(--accent)}
-  .meta h2{margin:0;color:#4b3f2f;font-weight:700;font-size:1.2em}
-  .meta p{margin:4px 0 0;color:var(--muted)}
-  audio{width:100%;margin-top:10px}
+  .no{width:28px;height:28px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);font-size:12px}
+  footer{margin:24px 0;color:var(--muted);text-align:center;font-size:12px}
 </style>
 </head>
 <body>
-<div class="card">
-  <h1>Sha'ar HaBitachon (Trust in G-d)</h1>
-  <audio id="audioPlayer" controls preload="auto"></audio>
-  <div class="playlist" id="playlist"></div>
+<header><h1>Sha'ar HaBitachon (Trust in G‑d)</h1></header>
+<div class="wrap">
+  <section class="card">
+    <div class="grid">
+      <!-- LEFT: Now Playing -->
+      <div class="now">
+        <div class="cover" id="cover">♪</div>
+        <div class="meta"><h2 class="t" id="np-title">—</h2><div class="a" id="np-artist">—</div></div>
+        <div class="controls">
+          <div class="row">
+            <button class="btn" id="prev">⏮ Prev</button>
+            <button class="btn primary" id="play">► Play</button>
+            <button class="btn" id="next">⏭ Next</button>
+            <button class="btn" id="loop" title="Loop">🔁 Loop</button>
+          </div>
+          <div class="row">
+            <span class="time" id="current">0:00</span>
+            <input id="seek" type="range" min="0" max="100" value="0" step="0.1" />
+            <span class="time" id="duration">0:00</span>
+          </div>
+          <div class="row">
+            <span class="time">Volume</span>
+            <input id="volume" type="range" min="0" max="1" step="0.01" value="1" />
+          </div>
+        </div>
+      </div>
+      <!-- RIGHT: Playlist -->
+      <aside class="playlist" id="playlist" aria-label="Playlist"></aside>
+    </div>
+  </section>
+  <footer>© 2025 Life Journey with the Chovos Halevavos</footer>
 </div>
+<audio id="audio" preload="metadata" crossorigin="anonymous"></audio>
 
-<script id="tracks-data" type="application/json">
-<!-- Paste the ENTIRE playlist array from the fancy-player here -->
-</script>
+<!-- Inline playlist: full embedded recordings -->
+<script id="tracks-data" type="application/json">[
+  {"title":"Intro to Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1OXTKGFiVQgaTAYEr1BHDtQxBTQjXA9Mo","cover":""},
+  {"title":"Intro to Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1TIUf6bteMy-5PPoIt8mDkeBoZdzFy4n5","cover":""},
+  {"title":"Intro to Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1axUuXa-9DR7SHvumT25DTbgZx33E_uYH","cover":""},
+  {"title":"Intro to Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1pEVEqT42PlI0VITAEsOB7VkbIiaJPeTt","cover":""},
+  {"title":"Intro to Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=17quXhf5l8cEj1mvgzUMvWvcQANvsG0dA","cover":""},
+  {"title":"Intro to Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1InRx3OmzK-biGANpsQXm6L3o3y29QelU","cover":""},
+  {"title":"Intro to Sha'ar HaBitachon – Part 8","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=16ymiV9Zjc80GOrDXti8ubaj9cp7q1JrR","cover":""},
+  {"title":"Intro to Sha'ar HaBitachon – Part 9","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=13dyefmpXMrSJQTbSwfnHr1A09o1Ed0rB","cover":""},
+  {"title":"Chapter 1 + Chapter 2 Sha'ar HaBitachon - Part 1 – Part 1","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1bKeeG30E8A94AUl9bMNLgrJOKfaYofSk","cover":""},
+  {"title":"Chapter 2: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1mTtUI2LaxjoPpKGeOA3Y1iS6LdQxOnNT","cover":""},
+  {"title":"Chapter 2: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1T_bZxDfNwrp3UlbpIklH0W5Iat-NkNsO","cover":""},
+  {"title":"Chapter 2: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=18eNxJNLScYoXCj9V5TNneyRBjhuO0TO3","cover":""},
+  {"title":"Chapter 2: Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1OutixxZQxcGe_XwiEdHdvSPzeMHh5bP2","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1Wuaqed7lBIECL-9Bp51PRti_uSPPqnvZ","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1bxsTy_SWQ41LXS6LEkvKMh1i4V45iLXx","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1-xS0JANAoQsn5uiKmB8MaFWlecd6j60i","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1Pkrk9K8hz_JQEKgglS5A8640n_hBfLi4","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1kuNCFHB-2-CmME2PAnhFgzxvYyVxW3S9","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1LXM0v6AgVh4txoOeY2X43o_VGEKbk8Le","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1EjgJH03mpSD4uI4F29LUgiILREHiEXhV","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 7","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1pRtO4WvZChGdM_JZpscpp13NOvkzKns7","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 8","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=13O9npouEdmTY8F2tOQF39_boM2BWzH8h","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 9","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1O96S-UJe8K2oZ5RgED3v4Qe_3La98rrc","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 10","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1LIJVXjblgRNn__zszMrh5MM4Fko_RO6o","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 11","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1GdhIevo40rQ1CTBB-rSBIv0VylPHEmdr","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 12","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1mKbEstuhgNLmdNVn7r6dX0-qT6Z6vqRn","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 13","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1cHDx17txAAQsQ80ArYZC1HQpbBky8d5k","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 14","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=11s8B-ZSGAjeHeiBTvhrj_o-civPxdKzR","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 15","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1MzomUrgYJbF2Bwx4yj1AxtupGau0gwTV","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 16","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1sqTNBXY60ybmnLQ6ASRieXi5GfEmL2tJ","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 17","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1tH2DVmTZROM1gH3Dtw0k-ppN86LbvBAn","cover":""},
+  {"title":"Chapter 3: Sha'ar HaBitachon – Part 18","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1it3DSnxt50k5G5InpfOr5S1kbI-_icaO","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1T4R89t-scdZr3XsA3L3GmwPx5jrYM75l","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1p59hdGsZOxdPB_q9fi9muMWIvXsAxGEe","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1DZ2rkkkGoAkvO1B7hpnJD7YQ-o8yrfbq","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1nph3h2y0Ngznq0wc18WKKKL14x6a3ZSl","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1mhTC25-OvISF3iswwP7z0D5FI8ASe-BO","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1Y91W1LS54d_x6qCbzsbqt5-WM2ME8pkT","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 7","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1f1ufEY2QfhgMpAKxX0zw1UrcrS6jBogd","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 8","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1gux2DSzXABLA2ZV-3rj3IJGr17l0U4li","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 9","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1pe-uDZcjncatuuigVKBPxQ3pK_no2MG7","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 10","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1E3YNj1rfH1H5GoOh5eSowTnxIfLILCIO","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 11","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1pBUMazPLWMiq_2baNll01-Z6Rnh0IE9q","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 12","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1g8SP-_gPoISsanP35emogOPr-6iNGogI","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 13","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1I94-O6s5KgdjfposNqrfMmp3229UkIpE","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 14","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=11Ql4dYg-QAT1-Kw9mqcJ3P6HZxjvyRpF","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 15","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1mvCTq_U3qEPau7TNp-KM0968eHetNWhY","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 16","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1Kzpf6uWFMzguLxXTHjtwBjvRfSvjxw4S","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 17","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1SWA5r0rvhretzD8ahHHy77tijk5qWPSY","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 18","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1qm2pr63n71NVWSNF4k7unIz6fG0jE2M9","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 19","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1exk5Ro6EymN11y3RjSHQeLpxV8zfxLv9","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 20","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1UzuGf0E6Ft-kHMJ5uuJf5pQRtp6raL7X","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 21","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1JAtcW2qMxEBSHyHVjj3laOtFdL7145TK","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 22","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1qKowFuoO5xyIAxwskhNmCcHZ2_dgm-uF","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 23","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1BU6en8MHsdeHjDnAwRE3c7YWYVvC-V0F","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 24","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=188jTpZGpg14uvBfW7KWFmL8X5FWtu2Rk","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 25","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=10k4UO5s1dqqnkYGoc_zjsxI2q9w7ktTf","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 26","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1KoR4Q6W0QkbcEIMUxv4Ur9qvPPx9GpbW","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 28","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=14SHRrZoTaAJNDCBu9lNBui2RQj4pyQk7","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 29","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1QZtbW3RWWbI8_r3OPk31-3khqpCf-F7O","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 30","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1goZUxa1m3apN_28mz9gbWmQrSLJLUMDf","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 31","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1bqfW2M8GsGoMiBHDVdtIoDnKpahky9Gb","cover":""},
+  {"title":"Chapter 4: Sha'ar HaBitachon – Part 32","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1uEi_g8ut5Zrd9VimpTrulCsgvnuutrD7","cover":""},
+  {"title":"Chapter 5: Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1cBcGwslp2GOUmrBXsftcgi3XskO6IC7u","cover":""},
+  {"title":"Chapter 5: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1kDNbxlCNCFNmrEoPQV5ad9nfE8aqs8fM","cover":""},
+  {"title":"Chapter 5: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1md_QoTIM8w8E9f-NjdHNHPZ-OrST_TuP","cover":""},
+  {"title":"Chapter 6: Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1VDr5vKCuOAZAZJb_hyeqcMfOzRggDIne","cover":""},
+  {"title":"Chapter 6: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1K3z9Xa6fyFqka7OfdC7CEdcBCGfjclv3","cover":""},
+  {"title":"Chapter 6: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1OaRUNZXcjiaNTH-2uqmoTaRvxjgnX9EQ","cover":""},
+  {"title":"Chapter 6: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1eMgVnZaF_4AG55wd7fTelSn54lqfQAxb","cover":""},
+  {"title":"Chapter 7: Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1UjPwbyZd7PAlaa-sF9ASK4HfbO_sP5h7","cover":""},
+  {"title":"Chapter 7: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1qz8bDuHgWLIDp4rJ-cjRKOydUsrJjvLC","cover":""},
+  {"title":"Chapter 7: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1-W7LyHrmXWMgzuJn52jLx8M0E6gmMfG3","cover":""},
+  {"title":"Chapter 7: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1UyOt8KKhgesM67V1qMWSW4hwxwxk3AH7","cover":""},
+  {"title":"Chapter 7: Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=13oa6t8sI5MnpYfPFX8vhs7WNPSEDDmIS","cover":""},
+  {"title":"Chapter 7: Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1_jsGrkXbUqmwFcR7PUs6mN_-z7l4d7zm","cover":""}
+]</script>
 
 <script>
-const audio = document.getElementById('audioPlayer');
-const playlistEl = document.getElementById('playlist');
-const tracks = JSON.parse(document.getElementById('tracks-data').textContent);
-let current = 0;
+// --- Tiny utility ---
+const $ = s => document.querySelector(s);
+const fmt = s => !isFinite(s)?'0:00':`${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,'0')}`;
 
-function loadTrack(index){
-  const track = tracks[index];
-  audio.src = track.url;
-  audio.load();
-  [...playlistEl.children].forEach(el => el.classList.remove('active'));
-  playlistEl.children[index].classList.add('active');
-  audio.play().catch(err => console.log('Autoplay prevented:', err));
+// --- Elements & state ---
+const audio = $('#audio');
+const elTitle = $('#np-title');
+const elArtist = $('#np-artist');
+const elCover = $('#cover');
+const elPlay = $('#play');
+const elPrev = $('#prev');
+const elNext = $('#next');
+const elSeek = $('#seek');
+const elCur = $('#current');
+const elDur = $('#duration');
+const elVol = $('#volume');
+const elLoop = $('#loop');
+const elList = $('#playlist');
+let tracks = [];
+let i = 0;
+let seeking = false;
+
+// --- Boot: load inline JSON ---
+try{ tracks = JSON.parse(document.getElementById('tracks-data').textContent)||[]; }
+catch(e){ console.error('Playlist JSON parse error', e); tracks=[]; }
+
+function render(){
+  elList.innerHTML='';
+  tracks.forEach((t,idx)=>{
+    const row=document.createElement('div');
+    row.className='track'+(idx===i?' active':'');
+    row.innerHTML=`<div class="no">${idx+1}</div><div><div class="t">${t.title||'Untitled'}</div><div class="a">${t.artist||''}</div></div>`;
+    row.addEventListener('click',()=>{ i=idx; load(true); });
+    elList.appendChild(row);
+  });
 }
 
-tracks.forEach((track,i)=>{
-  const div = document.createElement('div');
-  div.className = 'track';
-  div.innerHTML = `<div class="meta"><h2>${track.title}</h2><p>${track.artist}</p></div>`;
-  div.addEventListener('click', ()=>{
-    current = i;
-    loadTrack(current);
-  });
-  playlistEl.appendChild(div);
-});
+function setCover(src){ elCover.textContent=''; if(src){ elCover.innerHTML = `<img src="${src}" alt="Cover" style="max-width:100%;max-height:100%;border-radius:8px"/>`; } else { elCover.textContent='♪'; } }
 
-loadTrack(current);
+function load(autoplay){
+  const t = tracks[i]; if(!t) return;
+  elTitle.textContent = t.title||'Untitled';
+  elArtist.textContent = t.artist||'';
+  setCover(t.cover);
+  audio.src = t.url; audio.load();
+  [...elList.children].forEach((c,idx)=>c.classList.toggle('active', idx===i));
+  if(autoplay) audio.play().catch(()=>{});
+}
+
+// Controls
+elPlay.addEventListener('click', ()=> audio.paused? audio.play(): audio.pause());
+elPrev.addEventListener('click', ()=>{ i = (i-1+tracks.length)%tracks.length; load(true); });
+elNext.addEventListener('click', ()=>{ i = (i+1)%tracks.length; load(true); });
+elLoop.addEventListener('click', ()=>{ audio.loop = !audio.loop; elLoop.classList.toggle('primary', audio.loop); });
+elVol.addEventListener('input', ()=>{ audio.volume=parseFloat(elVol.value); });
+elSeek.addEventListener('input', ()=>{ seeking=true; const p=elSeek.value/100; audio.currentTime=p*(audio.duration||0); elCur.textContent=fmt(audio.currentTime); });
+elSeek.addEventListener('change', ()=> seeking=false);
+
+// Audio events
+audio.addEventListener('play', ()=> elPlay.textContent='❚❚ Pause');
+audio.addEventListener('pause', ()=> elPlay.textContent='► Play');
+audio.addEventListener('loadedmetadata', ()=>{ elDur.textContent=fmt(audio.duration); });
+audio.addEventListener('timeupdate', ()=>{ if(!seeking){ elCur.textContent=fmt(audio.currentTime); const p=(audio.currentTime/(audio.duration||1))*100; elSeek.value=isFinite(p)?p:0; }});
+audio.addEventListener('ended', ()=>{ if(!audio.loop) elNext.click(); });
+
+// Init
+render();
+load(false);
 </script>
 </body>
 </html>
-
