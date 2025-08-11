@@ -1,77 +1,292 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sha'ar HaBitachon Player</title>
-<style>
-  :root{
-    --bg:#fdfaf6; --panel:#fffefb; --text:#333; --muted:#6d6354;
-    --border:#ddd6c3; --accent:#8b5cf6; --accent-2:#6366f1; --brand:#4b3f2f;
-  }
-  html,body{background:var(--bg);color:var(--text);font-family:Georgia,"Times New Roman",serif;margin:0;padding:0}
-  header{background:#e8e1d4;padding:18px;text-align:center;box-shadow:0 2px 4px rgba(0,0,0,.06)}
-  header h1{margin:0;color:var(--brand);font-size:26px}
-  .wrap{max-width:960px;margin:24px auto;padding:0 16px}
-  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;box-shadow:0 2px 6px rgba(0,0,0,.05);padding:16px}
-  .grid{display:grid;grid-template-columns:360px 1fr;gap:16px}
-  @media (max-width:900px){.grid{grid-template-columns:1fr}}
-  .now{display:flex;flex-direction:column;gap:10px}
-  .cover{width:100%;aspect-ratio:1/1;border:1px dashed var(--border);border-radius:10px;display:grid;place-items:center;background:#faf7ef;color:var(--brand)}
-  .meta .t{margin:0;color:var(--brand);font-weight:700;font-size:18px}
-  .meta .a{margin:2px 0 0;color:var(--muted);font-size:14px}
-  .controls{display:grid;gap:10px}
-  .row{display:flex;align-items:center;gap:8px}
-  .btn{appearance:none;border:1px solid var(--border);background:#faf7ef;color:var(--brand);padding:8px 12px;border-radius:999px;cursor:pointer}
-  .btn.primary{background:linear-gradient(180deg,var(--accent),var(--accent-2));color:#fff;border-color:transparent;font-weight:700}
-  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;background:#faf7ef;border:1px solid var(--border);border-radius:999px}
-  input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);border:0}
-  .time{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px}
-  .playlist{padding:6px;max-height:70vh;overflow:auto}
-  .track{display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:center;padding:10px;border-radius:10px;border:1px solid transparent;cursor:pointer}
-  .track:hover{background:#faf7ef;border-color:var(--border)}
-  .track.active{background:#f6f1e6;border-color:var(--accent)}
-  .no{width:28px;height:28px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);font-size:12px}
-  footer{margin:24px 0;color:var(--muted);text-align:center;font-size:12px}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fancy Audio Player</title>
+  <style>
+    :root{
+      --bg:#0f172a;/* slate-900 */
+      --panel:#111827ee;/* gray-900 */
+      --text:#e5e7eb;/* gray-200 */
+      --muted:#9ca3af;/* gray-400 */
+      --accent:#22c55e;/* green-500 */
+      --accent-2:#10b981;/* emerald-500 */
+      --border:#1f2937;/* gray-800 */
+    }
+    html,body{height:100%;}
+    body{margin:0;background:linear-gradient(135deg,#0b1021 0%,#121a34 50%,#0b1021 100%);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji"}
+    .wrap{max-width:1100px;margin:40px auto;padding:24px}
+    .player{display:grid;grid-template-columns:360px 1fr;gap:24px}
+    @media (max-width:900px){.player{grid-template-columns:1fr}}
+    .card{background:var(--panel);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:18px;box-shadow:0 10px 30px #0006}
+    .now{padding:20px;display:grid;grid-template-rows:auto auto 1fr auto;gap:16px}
+    .cover{width:100%;aspect-ratio:1/1;border-radius:14px;background:#0b1227 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="%2322c55e"/><stop offset="1" stop-color="%2310b981"/></linearGradient></defs><rect width="200" height="200" fill="url(%23g)"/></svg>') center/cover no-repeat;display:grid;place-items:center;color:#000}
+    .cover span{font-weight:700;font-size:60px;letter-spacing:.02em;background:#fff;padding:.25em .4em;border-radius:12px}
+    .meta h2{margin:0;font-size:22px}
+    .meta p{margin:4px 0 0;color:var(--muted)}
+    .controls{display:grid;gap:10px}
+    .row{display:flex;align-items:center;gap:10px}
+    .btn{appearance:none;border:1px solid var(--border);background:#0b1021;color:var(--text);padding:10px 12px;border-radius:12px;cursor:pointer;transition:.15s transform,.15s background}
+    .btn:hover{background:#0d1429}
+    .btn:active{transform:scale(.98)}
+    .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));border-color:transparent;color:#00160b;font-weight:700}
+    .btn.ghost{background:transparent}
+    .grow{flex:1}
+    input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;background:#0b1021;border-radius:999px;border:1px solid var(--border);outline:none}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);border:none;box-shadow:0 0 0 3px #0006}
+    input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);border:none}
+    .time{font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted)}
+    .playlist{padding:10px;max-height:calc(100vh - 120px);overflow:auto}
+    .track{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:12px;border-radius:12px;border:1px solid transparent;cursor:pointer}
+    .track:hover{background:#0b1021}
+    .track.active{border-color:var(--accent)}
+    .no{width:28px;height:28px;display:grid;place-items:center;background:#0b1021;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:12px}
+    .t-title{font-size:15px;margin:0}
+    .t-artist{font-size:12px;color:var(--muted)}
+    .badge{font-size:10px;color:#00160b;background:linear-gradient(135deg,var(--accent),var(--accent-2));padding:3px 8px;border-radius:9999px;border:0}
+    .small{font-size:12px;color:var(--muted)}
+    .muted{color:var(--muted)}
+  </style>
 </head>
 <body>
-<header><h1>Sha'ar HaBitachon (Trust in G‑d)</h1></header>
-<div class="wrap">
-  <section class="card">
-    <div class="grid">
+  <div class="wrap">
+    <h1 style="margin:0 0 14px">🎧 Fancy Audio Player</h1>
+    <p class="small">Drop <code>embedded_tracks.json</code> next to this file (same-origin). The player will fetch it automatically. Click a track to play. Keyboard: <kbd>Space</kbd> play/pause, <kbd>←/→</kbd> seek 10s, <kbd>↑/↓</kbd> volume.</p>
+
+    <div class="player">
       <!-- LEFT: Now Playing -->
-      <div class="now">
-        <div class="cover" id="cover">♪</div>
-        <div class="meta"><h2 class="t" id="np-title">—</h2><div class="a" id="np-artist">—</div></div>
+      <section class="card now">
+        <div class="cover" id="cover"><span>♪</span></div>
+        <div class="meta">
+          <h2 id="title">—</h2>
+          <p id="artist">—</p>
+        </div>
+
         <div class="controls">
           <div class="row">
-            <button class="btn" id="prev">⏮ Prev</button>
+            <button class="btn" id="prev" title="Previous">⏮</button>
             <button class="btn primary" id="play">► Play</button>
-            <button class="btn" id="next">⏭ Next</button>
-            <button class="btn" id="loop" title="Loop">🔁 Loop</button>
+            <button class="btn" id="next" title="Next">⏭</button>
+            <div class="grow"></div>
+            <button class="btn ghost" id="loop" title="Loop">🔁</button>
+            <button class="btn ghost" id="mute" title="Mute">🔇</button>
           </div>
+
           <div class="row">
             <span class="time" id="current">0:00</span>
-            <input id="seek" type="range" min="0" max="100" value="0" step="0.1" />
+            <input id="seek" type="range" min="0" max="100" value="0" step="0.1" class="grow" />
             <span class="time" id="duration">0:00</span>
           </div>
+
           <div class="row">
-            <span class="time">Volume</span>
-            <input id="volume" type="range" min="0" max="1" step="0.01" value="1" />
+            <span class="muted">Volume</span>
+            <input id="volume" type="range" min="0" max="1" step="0.01" value="1" class="grow" />
           </div>
         </div>
-      </div>
-      <!-- RIGHT: Playlist -->
-      <aside class="playlist" id="playlist" aria-label="Playlist"></aside>
-    </div>
-  </section>
-  <footer>© 2025 Life Journey with the Chovos Halevavos</footer>
-</div>
-<audio id="audio" preload="metadata" crossorigin="anonymous"></audio>
 
-<!-- Inline playlist: full embedded recordings -->
-<script id="tracks-data" type="application/json">[
+        <div>
+          <span class="badge">Media Session</span>
+          <span class="small">Works with hardware keys on supported browsers.</span>
+        </div>
+      </section>
+
+      <!-- RIGHT: Playlist -->
+      <aside class="card playlist" id="playlist"></aside>
+    </div>
+  </div>
+
+  <!-- Hidden audio element -->
+  <audio id="audio" preload="metadata" crossorigin="anonymous"></audio>
+
+  <script>
+    // ---------- Configuration ----------
+    // We'll rely on the inline JSON playlist below. If you later want to fetch from a file, you can use JSON_PATH.
+    const JSON_PATH = null; // './embedded_tracks.json';
+
+    // Local file overrides by index (0-based). Use this to switch specific tracks to GitHub-hosted MP3s.
+    // Index 8 = the 9th item ("Chapter 1 + Chapter 2 ... Part 1 – Part 1").
+    const LOCAL_FILES = {
+      8: "https://yael6231.github.io/Journeys/audio/Chapter%201%2Bstart%20ch.2%20Sha%27ar%20HaBitachon%20%E2%80%93%20Part%201.mp3"
+    };
+
+    // ---------- Utilities ----------
+    const $ = sel => document.querySelector(sel);
+    const fmt = s => {
+      if (!isFinite(s)) return '0:00';
+      const m = Math.floor(s/60); const sec = Math.floor(s%60).toString().padStart(2,'0');
+      return `${m}:${sec}`;
+    };
+    const initialsFrom = (title='') => (title.match(/[A-Za-zא-ת]/g)||['♪']).slice(0,2).join('').toUpperCase();
+
+    // ---------- State ----------
+    let tracks = [];
+    let i = 0; // current index
+    let seeking = false;
+
+    // ---------- Elements ----------
+    const audio = $('#audio');
+    const elTitle = $('#title');
+    const elArtist = $('#artist');
+    const elCover = $('#cover');
+    const elPlay = $('#play');
+    const elPrev = $('#prev');
+    const elNext = $('#next');
+    const elSeek = $('#seek');
+    const elCurrent = $('#current');
+    const elDuration = $('#duration');
+    const elVolume = $('#volume');
+    const elMute = $('#mute');
+    const elLoop = $('#loop');
+    const elPlaylist = $('#playlist');
+
+    // ---------- Persistence (optional) ----------
+    const LS_KEY = 'fancy-player:v1';
+    const saveState = () => localStorage.setItem(LS_KEY, JSON.stringify({ i, t: audio.currentTime, v: audio.volume, m: audio.muted }));
+    const loadState = () => { try { return JSON.parse(localStorage.getItem(LS_KEY)||'{}'); } catch { return {}; } };
+
+    // ---------- Rendering ----------
+    function renderPlaylist(){
+      elPlaylist.innerHTML = '';
+      tracks.forEach((t, idx) => {
+        const item = document.createElement('div');
+        item.className = 'track' + (idx===i? ' active':'' );
+        item.dataset.index = idx;
+        item.innerHTML = `
+          <div class="no">${idx+1}</div>
+          <div>
+            <p class="t-title">${t.title||'Untitled'}</p>
+            <div class="t-artist">${t.artist||''}</div>
+          </div>
+          <div class="small">${t.duration? t.duration : ''}</div>
+        `;
+        item.addEventListener('click', () => { if(idx!==i){ i=idx; load(i,true); } else { audio.paused ? audio.play() : audio.pause(); } });
+        elPlaylist.appendChild(item);
+      });
+    }
+
+    function updateActive(){
+      [...elPlaylist.children].forEach((c, idx)=> c.classList.toggle('active', idx===i));
+    }
+
+    function setCover(src, title){
+      if (src){ elCover.style.backgroundImage = `url(${src})`; elCover.innerHTML=''; }
+      else{ elCover.style.backgroundImage = ''; elCover.innerHTML = `<span>${initialsFrom(title)}</span>`; }
+    }
+
+    function load(index, autoplay=false){
+      const t = tracks[index];
+      if(!t) return;
+      elTitle.textContent = t.title || 'Untitled';
+      elArtist.textContent = t.artist || '';
+      setCover(t.cover, t.title);
+      audio.src = t.url;
+      audio.loop = audio.loop; // keep current loop setting
+      updateActive();
+      if (autoplay) audio.play().catch(()=>{});
+      updateMediaSession(t);
+      saveState();
+    }
+
+    // ---------- Controls ----------
+    elPlay.addEventListener('click', ()=> audio.paused ? audio.play() : audio.pause());
+    elPrev.addEventListener('click', ()=> { i = (i - 1 + tracks.length) % tracks.length; load(i,true); });
+    elNext.addEventListener('click', ()=> { i = (i + 1) % tracks.length; load(i,true); });
+
+    elSeek.addEventListener('input', ()=>{
+      seeking = true;
+      const p = elSeek.value/100; audio.currentTime = p * (audio.duration||0);
+      elCurrent.textContent = fmt(audio.currentTime);
+    });
+    elSeek.addEventListener('change', ()=>{ seeking=false; saveState(); });
+
+    elVolume.addEventListener('input', ()=>{ audio.volume = parseFloat(elVolume.value); audio.muted = audio.volume === 0; saveState(); });
+    elMute.addEventListener('click', ()=>{ audio.muted = !audio.muted; saveState(); });
+    elLoop.addEventListener('click', ()=>{ audio.loop = !audio.loop; elLoop.classList.toggle('primary', audio.loop); });
+
+    // Keyboard shortcuts
+    window.addEventListener('keydown', (e)=>{
+      const tag = (e.target||{}).tagName; if(tag==='INPUT' || tag==='TEXTAREA' || e.metaKey || e.ctrlKey) return;
+      if(e.code==='Space'){ e.preventDefault(); audio.paused ? audio.play() : audio.pause(); }
+      else if(e.code==='ArrowRight'){ audio.currentTime = Math.min((audio.currentTime||0)+10,(audio.duration||0)); }
+      else if(e.code==='ArrowLeft'){ audio.currentTime = Math.max((audio.currentTime||0)-10,0); }
+      else if(e.code==='ArrowUp'){ audio.volume = Math.min(audio.volume+0.05,1); elVolume.value=audio.volume; }
+      else if(e.code==='ArrowDown'){ audio.volume = Math.max(audio.volume-0.05,0); elVolume.value=audio.volume; }
+    });
+
+    // ---------- Audio events ----------
+    audio.addEventListener('play', ()=>{ elPlay.textContent = '❚❚ Pause'; });
+    audio.addEventListener('pause', ()=>{ elPlay.textContent = '► Play'; saveState(); });
+    audio.addEventListener('timeupdate', ()=>{
+      if(!seeking){
+        elCurrent.textContent = fmt(audio.currentTime);
+        elDuration.textContent = fmt(audio.duration);
+        const p = (audio.currentTime/(audio.duration||1))*100; elSeek.value = isFinite(p)? p:0;
+      }
+    });
+    audio.addEventListener('ended', ()=>{ if(!audio.loop){ elNext.click(); } });
+    audio.addEventListener('loadedmetadata', ()=>{ elDuration.textContent = fmt(audio.duration); });
+    audio.addEventListener('volumechange', ()=>{ elMute.textContent = audio.muted? '🔊' : '🔇'; });
+
+    // ---------- Media Session (for hardware controls) ----------
+    function updateMediaSession(t){
+      if('mediaSession' in navigator){
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: t.title||'', artist: t.artist||'', album: 'Playlist', artwork: t.cover? [{src:t.cover,sizes:'512x512',type:'image/png'}]:[]
+        });
+        navigator.mediaSession.setActionHandler('previoustrack', ()=> elPrev.click());
+        navigator.mediaSession.setActionHandler('nexttrack', ()=> elNext.click());
+        navigator.mediaSession.setActionHandler('play', ()=> audio.play());
+        navigator.mediaSession.setActionHandler('pause', ()=> audio.pause());
+        navigator.mediaSession.setActionHandler('seekbackward', (d)=>{ audio.currentTime = Math.max(0,(audio.currentTime||0)-(d.seekOffset||10)); });
+        navigator.mediaSession.setActionHandler('seekforward', (d)=>{ audio.currentTime = Math.min((audio.duration||0),(audio.currentTime||0)+(d.seekOffset||10)); });
+      }
+    }
+
+    // ---------- Boot ----------
+    async function boot(){
+      // Try inline <script id="tracks-data"> first (works even on file://)
+      const inline = document.getElementById('tracks-data');
+      if (inline && inline.textContent.trim()){
+        try { tracks = JSON.parse(inline.textContent); } catch(e){ console.error('Inline JSON parse error', e); }
+      }
+      // If no inline data, try loading JSON from same-origin path
+      if ((!Array.isArray(tracks) || tracks.length===0) && JSON_PATH){
+        try{
+          const res = await fetch(JSON_PATH, {cache:'no-store'});
+          if(!res.ok) throw new Error('Failed to fetch embedded_tracks.json');
+          tracks = await res.json();
+        }catch(err){
+          console.warn('[Player] Could not fetch embedded_tracks.json. Falling back to demo list.', err);
+        }
+      }
+      if (!Array.isArray(tracks) || tracks.length===0){
+        tracks = [ { title: 'Demo Track', artist: 'Artist', url: 'https://file-examples.com/storage/fe6d04e6d2b04d6d78c0fcd/2017/11/file_example_MP3_700KB.mp3', cover: '' } ];
+      }
+
+      // Apply local-file overrides by index (e.g., GitHub-hosted MP3s you upload)
+      for (const [k, url] of Object.entries(LOCAL_FILES)) {
+        const idx = Number(k);
+        if (tracks[idx]) tracks[idx].url = url;
+      }
+
+      renderPlaylist();
+      const s = loadState();
+      if(Number.isInteger(s.i) && tracks[s.i]) i = s.i;
+      load(i, false);
+      if(Number.isFinite(s.t)) audio.currentTime = s.t;
+      if(Number.isFinite(s.v)) { audio.volume = s.v; elVolume.value = s.v; }
+      if(typeof s.m === 'boolean') audio.muted = s.m;
+    }
+
+    boot();
+
+    // Save before unload
+    window.addEventListener('beforeunload', saveState);
+  </script>
+
+  <!-- Inline playlist (full list). Only the 9th track is switched to your GitHub MP3 for now. -->
+  <script id="tracks-data" type="application/json">[
   {"title":"Intro to Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1OXTKGFiVQgaTAYEr1BHDtQxBTQjXA9Mo","cover":""},
   {"title":"Intro to Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1TIUf6bteMy-5PPoIt8mDkeBoZdzFy4n5","cover":""},
   {"title":"Intro to Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1axUuXa-9DR7SHvumT25DTbgZx33E_uYH","cover":""},
@@ -148,77 +363,7 @@
   {"title":"Chapter 7: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1UyOt8KKhgesM67V1qMWSW4hwxwxk3AH7","cover":""},
   {"title":"Chapter 7: Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=13oa6t8sI5MnpYfPFX8vhs7WNPSEDDmIS","cover":""},
   {"title":"Chapter 7: Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1_jsGrkXbUqmwFcR7PUs6mN_-z7l4d7zm","cover":""}
-]</script>
+  ]</script>
 
-<script>
-// --- Tiny utility ---
-const $ = s => document.querySelector(s);
-const fmt = s => !isFinite(s)?'0:00':`${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,'0')}`;
-
-// --- Elements & state ---
-const audio = $('#audio');
-const elTitle = $('#np-title');
-const elArtist = $('#np-artist');
-const elCover = $('#cover');
-const elPlay = $('#play');
-const elPrev = $('#prev');
-const elNext = $('#next');
-const elSeek = $('#seek');
-const elCur = $('#current');
-const elDur = $('#duration');
-const elVol = $('#volume');
-const elLoop = $('#loop');
-const elList = $('#playlist');
-let tracks = [];
-let i = 0;
-let seeking = false;
-
-// --- Boot: load inline JSON ---
-try{ tracks = JSON.parse(document.getElementById('tracks-data').textContent)||[]; }
-catch(e){ console.error('Playlist JSON parse error', e); tracks=[]; }
-
-function render(){
-  elList.innerHTML='';
-  tracks.forEach((t,idx)=>{
-    const row=document.createElement('div');
-    row.className='track'+(idx===i?' active':'');
-    row.innerHTML=`<div class="no">${idx+1}</div><div><div class="t">${t.title||'Untitled'}</div><div class="a">${t.artist||''}</div></div>`;
-    row.addEventListener('click',()=>{ i=idx; load(true); });
-    elList.appendChild(row);
-  });
-}
-
-function setCover(src){ elCover.textContent=''; if(src){ elCover.innerHTML = `<img src="${src}" alt="Cover" style="max-width:100%;max-height:100%;border-radius:8px"/>`; } else { elCover.textContent='♪'; } }
-
-function load(autoplay){
-  const t = tracks[i]; if(!t) return;
-  elTitle.textContent = t.title||'Untitled';
-  elArtist.textContent = t.artist||'';
-  setCover(t.cover);
-  audio.src = t.url; audio.load();
-  [...elList.children].forEach((c,idx)=>c.classList.toggle('active', idx===i));
-  if(autoplay) audio.play().catch(()=>{});
-}
-
-// Controls
-elPlay.addEventListener('click', ()=> audio.paused? audio.play(): audio.pause());
-elPrev.addEventListener('click', ()=>{ i = (i-1+tracks.length)%tracks.length; load(true); });
-elNext.addEventListener('click', ()=>{ i = (i+1)%tracks.length; load(true); });
-elLoop.addEventListener('click', ()=>{ audio.loop = !audio.loop; elLoop.classList.toggle('primary', audio.loop); });
-elVol.addEventListener('input', ()=>{ audio.volume=parseFloat(elVol.value); });
-elSeek.addEventListener('input', ()=>{ seeking=true; const p=elSeek.value/100; audio.currentTime=p*(audio.duration||0); elCur.textContent=fmt(audio.currentTime); });
-elSeek.addEventListener('change', ()=> seeking=false);
-
-// Audio events
-audio.addEventListener('play', ()=> elPlay.textContent='❚❚ Pause');
-audio.addEventListener('pause', ()=> elPlay.textContent='► Play');
-audio.addEventListener('loadedmetadata', ()=>{ elDur.textContent=fmt(audio.duration); });
-audio.addEventListener('timeupdate', ()=>{ if(!seeking){ elCur.textContent=fmt(audio.currentTime); const p=(audio.currentTime/(audio.duration||1))*100; elSeek.value=isFinite(p)?p:0; }});
-audio.addEventListener('ended', ()=>{ if(!audio.loop) elNext.click(); });
-
-// Init
-render();
-load(false);
-</script>
 </body>
 </html>
