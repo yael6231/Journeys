@@ -91,7 +91,15 @@
       font-size: 0.9em;
     }
   </style>
+
+  <script>
+    // Redirect lowercase 'shiurim.html' to correct case 'Shiurim.html'
+    if (location.pathname.toLowerCase().endsWith('/shiurim.html')) {
+      location.replace(location.pathname.replace(/shiurim\.html$/i, 'Shiurim.html'));
+    }
+  </script>
 </head>
+
 <body>
 
   <header>
@@ -102,10 +110,7 @@
     <a href="index.html">Home</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
-    <div class="dropdown">
-<a href="Shiurim.html">Shiurim</a>
-      </div>
-    </div>
+    <a href="Shiurim.html">Shiurim</a>
   </nav>
 
   <div class="content">
