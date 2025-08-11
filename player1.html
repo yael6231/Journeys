@@ -11,7 +11,7 @@
   }
   html,body{background:var(--bg);color:var(--text);font-family:Georgia,"Times New Roman",serif;margin:0;padding:0}
   .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;box-shadow:0 2px 6px rgba(0,0,0,.05);max-width:900px;margin:20px auto;padding:20px}
-  .playlist{padding:8px;max-height:70vh;overflow-y:auto}
+  .playlist{padding:8px;max-height:70vh;overflow-y:auto;}
   .track{border-radius:10px;padding:8px;display:flex;align-items:center;cursor:pointer;border:1px solid transparent;}
   .track:hover{background:#faf7ef;border-color:var(--border)}
   .track.active{background:#f6f1e6;border-color:var(--accent)}
@@ -22,12 +22,14 @@
 </head>
 <body>
 <div class="card">
-  <h1>Sha'ar HaBitachon (Trust in G‑d)</h1>
+  <h1>Sha'ar HaBitachon (Trust in G-d)</h1>
   <audio id="audioPlayer" controls preload="auto"></audio>
   <div class="playlist" id="playlist"></div>
 </div>
 
-<script id="tracks-data" type="application/json">REPLACE_WITH_EMBEDDED_JSON</script>
+<script id="tracks-data" type="application/json">
+<!-- Paste the ENTIRE playlist array from the fancy-player here -->
+</script>
 
 <script>
 const audio = document.getElementById('audioPlayer');
@@ -59,3 +61,4 @@ loadTrack(current);
 </script>
 </body>
 </html>
+
