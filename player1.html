@@ -1,90 +1,64 @@
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sha'ar HaBitachon • Audio Player</title>
+  <title>Test Player • Sha'ar HaBitachon</title>
   <style>
-    :root{
-      /* Light site theme to match your pages */
-      --bg:#fdfaf6; --panel:#fffefb; --text:#333; --muted:#6d6354;
-      --accent:#8b5cf6; --accent-2:#6366f1; --border:#ddd6c3; --brand:#4b3f2f;
-    }
+    :root{ --bg:#fdfaf6; --panel:#fffefb; --text:#333; --muted:#6d6354; --accent:#8b5cf6; --accent-2:#6366f1; --border:#ddd6c3; --brand:#4b3f2f; }
     html,body{height:100%}
-    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 Georgia, "Times New Roman", serif}
-    .wrap{max-width:980px;margin:32px auto;padding:20px}
-    h1{margin:0 0 10px;color:var(--brand)}
-    .small{font-size:12px;color:var(--muted)}
-
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 Georgia, serif}
+    .wrap{max-width:900px;margin:32px auto;padding:20px}
+    h1{margin:0 0 12px;color:var(--brand)}
     .player{display:grid;grid-template-columns:360px 1fr;gap:16px}
     @media (max-width:900px){.player{grid-template-columns:1fr}}
-
-    .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;box-shadow:0 2px 6px rgba(0,0,0,.06)}
-    .now{padding:16px;display:grid;grid-template-rows:auto auto 1fr auto;gap:12px}
-
-    .cover{width:100%;aspect-ratio:1/1;border-radius:10px;background:#faf7ef;display:grid;place-items:center;border:1px dashed var(--border);color:var(--muted)}
-    .cover span{font-weight:700;font-size:56px}
-
+    .card{background:var(--panel);border:1px solid var(--border);border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+    .now{padding:16px;display:grid;gap:10px}
+    .cover{width:100%;aspect-ratio:1/1;border-radius:10px;background:#faf7ef;border:1px dashed var(--border);display:grid;place-items:center;color:var(--muted)}
+    .cover span{font-size:56px;font-weight:700}
     .meta h2{margin:0;font-size:20px;color:var(--brand)}
-    .meta p{margin:4px 0 0;color:var(--muted)}
-
-    .controls{display:grid;gap:10px}
-    .row{display:flex;align-items:center;gap:10px}
-    .btn{appearance:none;border:1px solid var(--border);background:#faf7ef;color:var(--brand);padding:8px 12px;border-radius:999px;cursor:pointer}
+    .meta p{margin:0;color:var(--muted)}
+    .row{display:flex;gap:8px;align-items:center}
+    .btn{border:1px solid var(--border);background:#faf7ef;color:var(--brand);border-radius:999px;padding:8px 12px;cursor:pointer}
     .btn.primary{background:linear-gradient(180deg,var(--accent),var(--accent-2));border-color:transparent;color:#fff;font-weight:700}
     input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:999px;border:1px solid var(--border);background:#faf7ef}
     input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width:14px; height:14px; border-radius:50%; background:var(--accent); border:none; }
     input[type=range]::-moz-range-thumb{ width:14px; height:14px; border-radius:50%; background:var(--accent); border:none; }
-    .time{font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted)}
-
-    .playlist{padding:8px;max-height:calc(100vh - 160px);overflow:auto}
-    .track{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:10px;border-radius:10px;border:1px solid transparent;cursor:pointer}
+    .time{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+    .playlist{padding:10px;max-height:70vh;overflow:auto}
+    .track{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px;border-radius:10px;border:1px solid transparent;cursor:pointer}
     .track:hover{background:#faf7ef}
     .track.active{border-color:var(--accent);background:#f6f1e6}
     .no{width:28px;height:28px;display:grid;place-items:center;background:#faf7ef;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:12px}
-    .t-title{font-size:15px;margin:0;color:var(--brand)}
+    .t-title{margin:0;color:var(--brand)}
     .t-artist{font-size:12px;color:var(--muted)}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>🎧 Sha'ar HaBitachon • Playlist</h1>
-    <p class="small">Click a track to play. Space: play/pause • ←/→: seek • ↑/↓: volume. <strong>Only the first item is wired to your GitHub MP3 right now</strong>; the rest will work as you upload files to <code>/audio/</code>.</p>
-
+    <h1>🎧 Sha'ar HaBitachon — Test Player</h1>
     <div class="player">
-      <!-- LEFT: Now Playing -->
       <section class="card now">
         <div class="cover" id="cover"><span>♪</span></div>
-        <div class="meta">
-          <h2 id="title">—</h2>
-          <p id="artist">—</p>
+        <div class="meta"><h2 id="title">—</h2><p id="artist">—</p></div>
+        <div class="row">
+          <button class="btn" id="prev">⏮</button>
+          <button class="btn primary" id="play">► Play</button>
+          <button class="btn" id="next">⏭</button>
+          <div style="flex:1"></div>
+          <button class="btn" id="loop">🔁</button>
+          <button class="btn" id="mute">🔇</button>
         </div>
-
-        <div class="controls">
-          <div class="row">
-            <button class="btn" id="prev" title="Previous">⏮</button>
-            <button class="btn primary" id="play">► Play</button>
-            <button class="btn" id="next" title="Next">⏭</button>
-            <div style="flex:1"></div>
-            <button class="btn" id="loop" title="Loop">🔁</button>
-            <button class="btn" id="mute" title="Mute">🔇</button>
-          </div>
-
-          <div class="row">
-            <span class="time" id="current">0:00</span>
-            <input id="seek" type="range" min="0" max="100" value="0" step="0.1" />
-            <span class="time" id="duration">0:00</span>
-          </div>
-
-          <div class="row">
-            <span class="time">Volume</span>
-            <input id="volume" type="range" min="0" max="1" step="0.01" value="1" />
-          </div>
+        <div class="row">
+          <span class="time" id="current">0:00</span>
+          <input id="seek" type="range" min="0" max="100" value="0" step="0.1" />
+          <span class="time" id="duration">0:00</span>
         </div>
-
-        <div class="small">Works with hardware media keys on supported browsers.</div>
+        <div class="row">
+          <span class="time">Volume</span>
+          <input id="volume" type="range" min="0" max="1" step="0.01" value="1" />
+        </div>
       </section>
-
-      <!-- RIGHT: Playlist -->
       <aside class="card playlist" id="playlist" aria-label="Playlist"></aside>
     </div>
   </div>
@@ -92,12 +66,10 @@
   <audio id="audio" preload="metadata" crossorigin="anonymous"></audio>
 
   <script>
-    // ---------- Utilities ----------
     const $ = s => document.querySelector(s);
-    const fmt = s => { if(!isFinite(s)) return '0:00'; const m=Math.floor(s/60), sec=Math.floor(s%60).toString().padStart(2,'0'); return `${m}:${sec}`; };
-    const initialsFrom = (title='') => (title.match(/[A-Za-zא-ת]/g)||['♪']).slice(0,2).join('').toUpperCase();
+    const fmt = s => (!isFinite(s)?'0:00':`${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,'0')}`);
+    const initialsFrom = t => (String(t||'').match(/[A-Za-zא-ת]/g)||['♪']).slice(0,2).join('').toUpperCase();
 
-    // ---------- Elements ----------
     const audio=$('#audio');
     const elTitle=$('#title'), elArtist=$('#artist'), elCover=$('#cover');
     const elPlay=$('#play'), elPrev=$('#prev'), elNext=$('#next');
@@ -105,171 +77,46 @@
     const elVolume=$('#volume'), elMute=$('#mute'), elLoop=$('#loop');
     const elPlaylist=$('#playlist');
 
-    // ---------- State ----------
     let tracks=[]; let i=0; let seeking=false;
 
-    // ---------- Rendering ----------
     function renderPlaylist(){
       elPlaylist.innerHTML='';
       tracks.forEach((t,idx)=>{
-        const item=document.createElement('div');
-        item.className='track'+(idx===i?' active':'');
-        item.dataset.index=idx;
-        item.innerHTML=`
-          <div class="no">${idx+1}</div>
-          <div>
-            <p class="t-title">${t.title||'Untitled'}</p>
-            <div class="t-artist">${t.artist||''}</div>
-          </div>
-          <div class="time"></div>`;
-        item.addEventListener('click',()=>{
-          if(!t.url){
-            alert("This track isn't uploaded yet. Upload the MP3 to /audio and set its URL.");
-            return;
-          }
-          if(idx!==i){ i=idx; load(i,true); } else { audio.paused?audio.play():audio.pause(); }
-        });
-        elPlaylist.appendChild(item);
+        const d=document.createElement('div');
+        d.className='track'+(idx===i?' active':'');
+        d.innerHTML=`<div class="no">${idx+1}</div><div><p class="t-title">${t.title||'Untitled'}</p><div class="t-artist">${t.artist||''}</div></div><div class="time"></div>`;
+        d.addEventListener('click',()=>{ if(!t.url){ alert('This track URL is empty.'); return; } if(idx!==i){i=idx; load(i,true);} else { audio.paused?audio.play():audio.pause(); } });
+        elPlaylist.appendChild(d);
       });
     }
     function updateActive(){ [...elPlaylist.children].forEach((c,idx)=>c.classList.toggle('active', idx===i)); }
-    function setCover(src,title){ if(src){ elCover.style.backgroundImage=`url(${src})`; elCover.style.backgroundSize='cover'; elCover.innerHTML=''; } else { elCover.style.backgroundImage=''; elCover.innerHTML=`<span>${initialsFrom(title)}</span>`; } }
+    function setCover(src,title){ if(src){ elCover.style.backgroundImage=`url(${src})`; elCover.innerHTML=''; } else { elCover.style.backgroundImage=''; elCover.innerHTML=`<span>${initialsFrom(title)}</span>`; } }
+    function load(index,autoplay){ const t=tracks[index]; if(!t) return; elTitle.textContent=t.title||'Untitled'; elArtist.textContent=t.artist||''; setCover(t.cover,t.title); audio.src=t.url||''; updateActive(); if(autoplay) audio.play().catch(()=>{}); }
 
-    function load(index, autoplay=false){
-      const t=tracks[index]; if(!t) return;
-      elTitle.textContent=t.title||'Untitled';
-      elArtist.textContent=t.artist||'';
-      setCover(t.cover, t.title);
-      audio.src=t.url||'';
-      updateActive();
-      if(autoplay) audio.play().catch(()=>{});
-      updateMediaSession(t);
-    }
-
-    // ---------- Controls ----------
     elPlay.addEventListener('click',()=> audio.paused?audio.play():audio.pause());
     elPrev.addEventListener('click',()=>{ i=(i-1+tracks.length)%tracks.length; load(i,true); });
     elNext.addEventListener('click',()=>{ i=(i+1)%tracks.length; load(i,true); });
-
     elSeek.addEventListener('input',()=>{ seeking=true; const p=elSeek.value/100; audio.currentTime=p*(audio.duration||0); elCurrent.textContent=fmt(audio.currentTime); });
     elSeek.addEventListener('change',()=>{ seeking=false; });
     elVolume.addEventListener('input',()=>{ audio.volume=parseFloat(elVolume.value); audio.muted=audio.volume===0; });
     elMute.addEventListener('click',()=>{ audio.muted=!audio.muted; });
     elLoop.addEventListener('click',()=>{ audio.loop=!audio.loop; elLoop.classList.toggle('primary', audio.loop); });
 
-    window.addEventListener('keydown',(e)=>{
-      const tag=(e.target||{}).tagName; if(tag==='INPUT' || tag==='TEXTAREA' || e.metaKey || e.ctrlKey) return;
-      if(e.code==='Space'){ e.preventDefault(); audio.paused?audio.play():audio.pause(); }
-      else if(e.code==='ArrowRight'){ audio.currentTime=Math.min((audio.currentTime||0)+10,(audio.duration||0)); }
-      else if(e.code==='ArrowLeft'){ audio.currentTime=Math.max((audio.currentTime||0)-10,0); }
-      else if(e.code==='ArrowUp'){ audio.volume=Math.min(audio.volume+0.05,1); elVolume.value=audio.volume; }
-      else if(e.code==='ArrowDown'){ audio.volume=Math.max(audio.volume-0.05,0); elVolume.value=audio.volume; }
-    });
-
     audio.addEventListener('play',()=>{ elPlay.textContent='❚❚ Pause'; });
     audio.addEventListener('pause',()=>{ elPlay.textContent='► Play'; });
     audio.addEventListener('timeupdate',()=>{ if(!seeking){ elCurrent.textContent=fmt(audio.currentTime); elDuration.textContent=fmt(audio.duration); const p=(audio.currentTime/(audio.duration||1))*100; elSeek.value=isFinite(p)?p:0; }});
     audio.addEventListener('ended',()=>{ if(!audio.loop) elNext.click(); });
-    audio.addEventListener('loadedmetadata',()=>{ elDuration.textContent=fmt(audio.duration); });
-    audio.addEventListener('volumechange',()=>{ elMute.textContent=audio.muted?'🔊':'🔇'; });
 
-    function updateMediaSession(t){
-      if('mediaSession' in navigator){
-        navigator.mediaSession.metadata=new MediaMetadata({ title:t.title||'', artist:t.artist||'', album:'Playlist', artwork:t.cover?[{src:t.cover,sizes:'512x512',type:'image/png'}]:[] });
-        navigator.mediaSession.setActionHandler('previoustrack',()=>elPrev.click());
-        navigator.mediaSession.setActionHandler('nexttrack',()=>elNext.click());
-        navigator.mediaSession.setActionHandler('play',()=>audio.play());
-        navigator.mediaSession.setActionHandler('pause',()=>audio.pause());
-      }
-    }
-
-    // ---------- Boot: read inline JSON ----------
+    // Boot with one working MP3 + placeholders
     (function boot(){
-      const inline=document.getElementById('tracks-data');
-      try{ tracks=JSON.parse(inline.textContent); }catch(e){ console.error('Playlist JSON parse error', e); tracks=[]; }
+      tracks = [
+        { title: "Intro to Sha'ar HaBitachon – Part 1", artist: "Rebbetzin Eisenbach", url: "https://yael6231.github.io/Journeys/audio/Chapter%201%2Bstart%20ch.2%20Sha%27ar%20HaBitachon%20%E2%80%93%20Part%201.mp3", cover: "" },
+        { title: "Intro to Sha'ar HaBitachon – Part 2", artist: "Rebbetzin Eisenbach", url: "", cover: "" },
+        { title: "Intro to Sha'ar HaBitachon – Part 3", artist: "Rebbetzin Eisenbach", url: "", cover: "" }
+      ];
       renderPlaylist();
-      if(tracks.length){ load(0,false); }
+      load(0,false);
     })();
   </script>
-
-  <!-- Inline playlist: ONLY the first item points to your GitHub MP3 (plays now); others have empty URLs for you to fill in later. -->
-  <script id="tracks-data" type="application/json">[
-    {"title":"Intro to Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"https://yael6231.github.io/Journeys/audio/Chapter%201%2Bstart%20ch.2%20Sha%27ar%20HaBitachon%20%E2%80%93%20Part%201.mp3","cover":""},
-    {"title":"Intro to Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Intro to Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Intro to Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Intro to Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Intro to Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Intro to Sha'ar HaBitachon – Part 8","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Intro to Sha'ar HaBitachon – Part 9","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 1 + Chapter 2 Sha'ar HaBitachon - Part 1 – Part 1","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 2: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 2: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 2: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 2: Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 7","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 8","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 9","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 10","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 11","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 12","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 13","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 14","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 15","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 16","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 17","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 3: Sha'ar HaBitachon – Part 18","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 7","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 8","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 9","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 10","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 11","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 12","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 13","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 14","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 15","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 16","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 17","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 18","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 19","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 20","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 21","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 22","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 23","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 24","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 25","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 26","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 28","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 29","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 30","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 31","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 4: Sha'ar HaBitachon – Part 32","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 5: Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 5: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 5: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 6: Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 6: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 6: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 6: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 7: Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 7: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 7: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 7: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 7: Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"","cover":""},
-    {"title":"Chapter 7: Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"","cover":""}
-  ]</script>
 </body>
 </html>
