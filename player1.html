@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -6,8 +5,7 @@
   <title>Sha'ar HaBitachon • Audio Player</title>
   <style>
     :root{
-
-      /* Light site theme */
+      /* Light site theme to match your pages */
       --bg:#fdfaf6; --panel:#fffefb; --text:#333; --muted:#6d6354;
       --accent:#8b5cf6; --accent-2:#6366f1; --border:#ddd6c3; --brand:#4b3f2f;
     }
@@ -50,7 +48,7 @@
 <body>
   <div class="wrap">
     <h1>🎧 Sha'ar HaBitachon • Playlist</h1>
-    <p class="small">Click a track to play. Space: play/pause • ←/→: seek • ↑/↓: volume. Only the first item is playable now; others will play once you upload MP3s to <code>/audio/</code>.</p>
+    <p class="small">Click a track to play. Space: play/pause • ←/→: seek • ↑/↓: volume. <strong>Only the first item is wired to your GitHub MP3 right now</strong>; the rest will work as you upload files to <code>/audio/</code>.</p>
 
     <div class="player">
       <!-- LEFT: Now Playing -->
@@ -83,7 +81,7 @@
           </div>
         </div>
 
-        <div class="small">Works with hardware keys on supported browsers.</div>
+        <div class="small">Works with hardware media keys on supported browsers.</div>
       </section>
 
       <!-- RIGHT: Playlist -->
@@ -124,7 +122,13 @@
             <div class="t-artist">${t.artist||''}</div>
           </div>
           <div class="time"></div>`;
-        item.addEventListener('click',()=>{ if(idx!==i){ i=idx; load(i,true); } else { audio.paused?audio.play():audio.pause(); } });
+        item.addEventListener('click',()=>{
+          if(!t.url){
+            alert("This track isn't uploaded yet. Upload the MP3 to /audio and set its URL.");
+            return;
+          }
+          if(idx!==i){ i=idx; load(i,true); } else { audio.paused?audio.play():audio.pause(); }
+        });
         elPlaylist.appendChild(item);
       });
     }
@@ -188,18 +192,84 @@
     })();
   </script>
 
-  <!-- Inline playlist: first item points to your GitHub MP3 (works), others keep titles/links for now -->
+  <!-- Inline playlist: ONLY the first item points to your GitHub MP3 (plays now); others have empty URLs for you to fill in later. -->
   <script id="tracks-data" type="application/json">[
-  {"title":"Intro to Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"https://yael6231.github.io/Journeys/audio/Chapter%201%2Bstart%20ch.2%20Sha%27ar%20HaBitachon%20%E2%80%93%20Part%201.mp3","cover":""},
-  {"title":"Intro to Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1TIUf6bteMy-5PPoIt8mDkeBoZdzFy4n5","cover":""},
-  {"title":"Intro to Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1axUuXa-9DR7SHvumT25DTbgZx33E_uYH","cover":""},
-  {"title":"Intro to Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1pEVEqT42PlI0VITAEsOB7VkbIiaJPeTt","cover":""},
-  {"title":"Intro to Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=17quXhf5l8cEj1mvgzUMvWvcQANvsG0dA","cover":""},
-  {"title":"Intro to Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1InRx3OmzK-biGANpsQXm6L3o3y29QelU","cover":""},
-  {"title":"Intro to Sha'ar HaBitachon – Part 8","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=16ymiV9Zjc80GOrDXti8ubaj9cp7q1JrR","cover":""},
-  {"title":"Intro to Sha'ar HaBitachon – Part 9","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=13dyefmpXMrSJQTbSwfnHr1A09o1Ed0rB","cover":""},
-  {"title":"Chapter 1 + Chapter 2 Sha'ar HaBitachon - Part 1 – Part 1","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1bKeeG30E8A94AUl9bMNLgrJOKfaYofSk","cover":""},
-  {"title":"Chapter 2: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"https://drive.google.com/uc?export=download&id=1mTtUI2LaxjoPpKGeOA3Y1iS6LdQxOnNT","cover":""}
-]</script>
+    {"title":"Intro to Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"https://yael6231.github.io/Journeys/audio/Chapter%201%2Bstart%20ch.2%20Sha%27ar%20HaBitachon%20%E2%80%93%20Part%201.mp3","cover":""},
+    {"title":"Intro to Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Intro to Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Intro to Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Intro to Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Intro to Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Intro to Sha'ar HaBitachon – Part 8","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Intro to Sha'ar HaBitachon – Part 9","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 1 + Chapter 2 Sha'ar HaBitachon - Part 1 – Part 1","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 2: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 2: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 2: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 2: Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 7","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 8","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 9","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 10","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 11","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 12","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 13","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 14","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 15","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 16","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 17","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 3: Sha'ar HaBitachon – Part 18","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 7","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 8","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 9","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 10","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 11","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 12","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 13","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 14","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 15","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 16","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 17","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 18","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 19","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 20","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 21","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 22","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 23","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 24","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 25","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 26","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 28","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 29","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 30","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 31","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 4: Sha'ar HaBitachon – Part 32","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 5: Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 5: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 5: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 6: Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 6: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 6: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 6: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 7: Sha'ar HaBitachon – Part 1","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 7: Sha'ar HaBitachon – Part 2","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 7: Sha'ar HaBitachon – Part 3","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 7: Sha'ar HaBitachon – Part 4","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 7: Sha'ar HaBitachon – Part 5","artist":"Rebbetzin Eisenbach","url":"","cover":""},
+    {"title":"Chapter 7: Sha'ar HaBitachon – Part 6","artist":"Rebbetzin Eisenbach","url":"","cover":""}
+  ]</script>
 </body>
 </html>
