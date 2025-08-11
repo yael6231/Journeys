@@ -1,303 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Playlist Audio Player (76 tracks)</title>
-  <style>
-    :root{
-      --bg:#0f172a;          /* slate-900 */
-      --panel:#111827;       /* gray-900 */
-      --muted:#94a3b8;       /* slate-400 */
-      --text:#e5e7eb;        /* gray-200 */
-      --accent:#22d3ee;      /* cyan-400 */
-      --accent-2:#06b6d4;    /* cyan-500 */
-      --border:#1f2937;      /* gray-800 */
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;
-      background:linear-gradient(180deg, #0b1220, var(--bg));
-      color:var(--text);
-      display:flex; align-items:center; justify-content:center; padding:24px;
-    }
-    .app{width:min(1100px,100%); display:grid; grid-template-columns: 1.2fr 2fr; gap:18px}
-    @media (max-width: 900px){ .app{grid-template-columns:1fr;}}
-    .card{background:rgba(17,24,39,.75); border:1px solid var(--border); border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.35)}
-    .panel{padding:16px}
-    .title{font-size:18px; font-weight:700; letter-spacing:.2px; margin:0 0 4px}
-    .subtitle{font-size:12px; color:var(--muted); margin:0 0 12px}
-
-    /* Controls */
-    .player{display:flex; flex-direction:column; gap:14px}
-    .row{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
-    .controls{display:flex; align-items:center; gap:10px}
-    button{
-      background:#0b1220; color:var(--text); border:1px solid var(--border);
-      border-radius:12px; padding:10px 12px; cursor:pointer; font-weight:600;
-      transition:transform .05s ease, border-color .2s ease, background .2s ease;
-    }
-    button:hover{border-color:#334155}
-    button:active{transform:translateY(1px)}
-    button.primary{background:linear-gradient(180deg,var(--accent),var(--accent-2)); border:none; color:#00151a}
-    button[aria-pressed="true"]{outline:2px solid var(--accent)}
-    .grow{flex:1}
-
-    input[type="range"]{width:100%}
-    .time{font-variant-tabular-nums:tabular-nums; min-width:64px; text-align:center}
-    .filename{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-
-    /* Playlist */
-    .playlist{max-height:60vh; overflow:auto; border-top:1px solid var(--border)}
-    .track{display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:10px; padding:10px 12px; border-bottom:1px solid var(--border); cursor:pointer}
-    .track:hover{background:#0b1220}
-    .track.active{background:rgba(34,211,238,.1); outline:1px solid rgba(34,211,238,.2)}
-    .index{width:28px; text-align:right; color:var(--muted)}
-    .track-title{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-    .dur{font-variant-numeric:tabular-nums; color:var(--muted); padding-left:6px}
-
-    .search{display:flex; gap:10px; margin-bottom:10px}
-    .search input{flex:1; padding:10px 12px; border-radius:12px; border:1px solid var(--border); background:#0b1220; color:var(--text)}
-    .badge{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; background:#0b1220; border:1px solid var(--border); color:var(--muted); font-size:12px}
-    .footer{font-size:12px; color:var(--muted); display:flex; justify-content:space-between; align-items:center}
-    a{color:var(--accent)}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sha'ar HaBitachon Player</title>
+<style>
+  :root{
+    --bg:#fdfaf6; --panel:#fffefb; --text:#333; --muted:#6d6354;
+    --border:#ddd6c3; --accent:#8b5cf6; --accent-2:#6366f1;
+  }
+  html,body{background:var(--bg);color:var(--text);font-family:Georgia,"Times New Roman",serif;margin:0;padding:0}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;box-shadow:0 2px 6px rgba(0,0,0,.05);max-width:900px;margin:20px auto;padding:20px}
+  .playlist{padding:8px;max-height:70vh;overflow-y:auto}
+  .track{border-radius:10px;padding:8px;display:flex;align-items:center;cursor:pointer;border:1px solid transparent;}
+  .track:hover{background:#faf7ef;border-color:var(--border)}
+  .track.active{background:#f6f1e6;border-color:var(--accent)}
+  .meta h2{margin:0;color:#4b3f2f;font-weight:700;font-size:1.2em}
+  .meta p{margin:4px 0 0;color:var(--muted)}
+  audio{width:100%;margin-top:10px}
+</style>
 </head>
 <body>
-  <div class="app">
-    <!-- Playlist side -->
-    <section class="card panel" aria-label="Playlist">
-      <h1 class="title">Playlist</h1>
-      <p class="subtitle">Drop in your 76 tracks below (click a track to play). Search filters instantly.</p>
-      <div class="search">
-        <input id="q" type="search" placeholder="Search title… (e.g. 'Lesson 12')" aria-label="Search tracks" />
-        <span class="badge" id="countBadge">0 tracks</span>
-      </div>
-      <div class="playlist" id="playlist" role="listbox" aria-label="Track list"></div>
-      <div class="footer" style="margin-top:10px">
-        <span>Keyboard: Space = Play/Pause, J/K = Prev/Next</span>
-        <label class="badge"><input type="checkbox" id="persist" style="accent-color:#22d3ee; width:14px; height:14px"> Remember position</label>
-      </div>
-    </section>
+<div class="card">
+  <h1>Sha'ar HaBitachon (Trust in G‑d)</h1>
+  <audio id="audioPlayer" controls preload="auto"></audio>
+  <div class="playlist" id="playlist"></div>
+</div>
 
-    <!-- Player side -->
-    <section class="card panel" aria-label="Player">
-      <div class="player">
-        <div>
-          <div class="title filename" id="nowTitle">—</div>
-          <div class="subtitle" id="nowSrc">Choose a track to begin</div>
-        </div>
+<script id="tracks-data" type="application/json">REPLACE_WITH_EMBEDDED_JSON</script>
 
-        <audio id="audio" preload="metadata" crossorigin></audio>
+<script>
+const audio = document.getElementById('audioPlayer');
+const playlistEl = document.getElementById('playlist');
+const tracks = JSON.parse(document.getElementById('tracks-data').textContent);
+let current = 0;
 
-        <div class="row">
-          <div class="controls">
-            <button id="prevBtn" title="Previous (J)">⏮ Prev</button>
-            <button id="playBtn" class="primary" title="Play/Pause (Space)">▶ Play</button>
-            <button id="nextBtn" title="Next (K)">⏭ Next</button>
-          </div>
-          <div class="grow row" style="gap:8px">
-            <span class="time" id="currentTime">0:00</span>
-            <input id="seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek"/>
-            <span class="time" id="duration">0:00</span>
-          </div>
-        </div>
+function loadTrack(index){
+  const track = tracks[index];
+  audio.src = track.url;
+  audio.load();
+  [...playlistEl.children].forEach(el => el.classList.remove('active'));
+  playlistEl.children[index].classList.add('active');
+  audio.play().catch(err => console.log('Autoplay prevented:', err));
+}
 
-        <div class="row">
-          <label class="badge">Volume <input id="vol" type="range" min="0" max="1" step="0.01" value="1" style="width:150px"></label>
-          <button id="muteBtn" title="Mute/Unmute">🔈 Mute</button>
-          <label class="badge">Speed
-            <select id="rate">
-              <option>0.75</option>
-              <option selected>1.0</option>
-              <option>1.25</option>
-              <option>1.5</option>
-              <option>1.75</option>
-              <option>2.0</option>
-            </select>
-          </label>
-          <button id="loopBtn" aria-pressed="false" title="Loop current">🔁 Loop</button>
-          <button id="shuffleBtn" aria-pressed="false" title="Shuffle on end">🔀 Shuffle</button>
-          <span class="grow"></span>
-          <button id="downloadBtn" title="Download current">⬇ Download</button>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <script>
-  /* =========================
-     1) Configure your tracks
-     ========================= */
-  // Option A: list each track (title + URL). Replace with your 76 files.
-  const TRACKS = [
-    // { title: "Lesson 01 — Intro", src: "https://example.com/audio/lesson01.mp3" },
-    // { title: "Lesson 02 — Basics", src: "https://example.com/audio/lesson02.mp3" },
-  ];
-
-  // Option B (optional): if your files are sequentially named like track01.mp3..track76.mp3
-  // uncomment and customize these lines to auto-generate.
-  // for (let i=1;i<=76;i++) {
-  //   const n = String(i).padStart(2,'0');
-  //   TRACKS.push({ title: `Track ${n}`, src: `https://example.com/audio/track${n}.mp3` });
-  // }
-
-  /* =========================
-     2) Player logic (no edits needed)
-     ========================= */
-  const $ = sel => document.querySelector(sel);
-  const fmt = s => {
-    if (!isFinite(s)) return '0:00';
-    s = Math.max(0, Math.floor(s));
-    const m = Math.floor(s/60), r = s%60; return `${m}:${String(r).padStart(2,'0')}`;
-  };
-  const audio = $('#audio');
-  const nowTitle = $('#nowTitle');
-  const nowSrc = $('#nowSrc');
-  const playBtn = $('#playBtn');
-  const prevBtn = $('#prevBtn');
-  const nextBtn = $('#nextBtn');
-  const currentTimeEl = $('#currentTime');
-  const durationEl = $('#duration');
-  const seek = $('#seek');
-  const vol = $('#vol');
-  const muteBtn = $('#muteBtn');
-  const rate = $('#rate');
-  const loopBtn = $('#loopBtn');
-  const shuffleBtn = $('#shuffleBtn');
-  const downloadBtn = $('#downloadBtn');
-  const q = $('#q');
-  const playlistEl = $('#playlist');
-  const countBadge = $('#countBadge');
-  const persist = $('#persist');
-
-  const STATE_KEY = 'audio76.state.v1';
-  let state = { index: 0, time: 0, volume: 1, rate: 1.0, loop:false, shuffle:false, persist:false };
-  try { state = Object.assign(state, JSON.parse(localStorage.getItem(STATE_KEY)||'{}')); } catch {}
-  persist.checked = !!state.persist;
-
-  let view = [...TRACKS]; // filtered view
-
-  function save(){ if (persist.checked) { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } }
-  function restore(){ if (persist.checked) {
-      const s = JSON.parse(localStorage.getItem(STATE_KEY)||'{}');
-      if (s && TRACKS[s.index]) { state = Object.assign(state,s); }
-    }
-  }
-
-  function renderList(){
-    playlistEl.innerHTML = '';
-    const qv = (q.value||'').toLowerCase();
-    view = TRACKS.map((t,i)=>({ ...t, i })).filter(t => t.title.toLowerCase().includes(qv));
-    countBadge.textContent = `${view.length} track${view.length===1?'':'s'}`;
-    view.forEach((t, idx) => {
-      const row = document.createElement('div');
-      row.className = 'track' + (t.i===state.index ? ' active':'');
-      row.setAttribute('role','option');
-      row.setAttribute('aria-selected', String(t.i===state.index));
-      row.innerHTML = `<div class="index">${t.i+1}</div>
-                       <div class="track-title">${t.title}</div>
-                       <div class="dur" id="dur-${t.i}">—:—</div>`;
-      row.addEventListener('click', () => loadAndPlay(t.i));
-      playlistEl.appendChild(row);
-      // Lazy fetch duration metadata (without loading full audio)
-      const probe = document.createElement('audio');
-      probe.preload = 'metadata'; probe.src = t.src; probe.addEventListener('loadedmetadata',()=>{
-        const d = document.getElementById(`dur-${t.i}`); if (d) d.textContent = fmt(probe.duration);
-      }, {once:true});
-      // Triggering loading of metadata without adding to DOM
-    });
-  }
-
-  function setNowPlaying(i){
-    const t = TRACKS[i]; if (!t) return;
-    nowTitle.textContent = t.title;
-    nowSrc.textContent = t.src;
-    downloadBtn.disabled = false; downloadBtn.onclick = () => window.open(t.src, '_blank');
-    // Highlight active
-    [...document.querySelectorAll('.track')].forEach((el,idx) => el.classList.toggle('active', view[idx]?.i===i));
-  }
-
-  function load(index){
-    if (!TRACKS[index]) return;
-    state.index = index; save();
-    audio.src = TRACKS[index].src;
-    audio.loop = !!state.loop;
-    audio.playbackRate = state.rate;
-    audio.volume = state.volume;
-    setNowPlaying(index);
-  }
-
-  function loadAndPlay(index){ load(index); audio.play().catch(()=>{}); syncPlayButton(); }
-
-  function next(){
-    if (state.shuffle){
-      const n = Math.floor(Math.random()*TRACKS.length);
-      loadAndPlay(n);
-    } else {
-      const n = (state.index+1) % TRACKS.length; loadAndPlay(n);
-    }
-  }
-  function prev(){
-    const n = (state.index-1+TRACKS.length) % TRACKS.length; loadAndPlay(n);
-  }
-
-  function syncPlayButton(){ playBtn.textContent = audio.paused ? '▶ Play' : '⏸ Pause'; }
-
-  // Event wiring
-  playBtn.onclick = () => { if (audio.src){ audio.paused ? audio.play() : audio.pause(); syncPlayButton(); } };
-  prevBtn.onclick = prev; nextBtn.onclick = next;
-
-  audio.addEventListener('timeupdate', () => {
-    currentTimeEl.textContent = fmt(audio.currentTime);
-    durationEl.textContent = fmt(audio.duration);
-    if (isFinite(audio.duration)) seek.value = Math.floor((audio.currentTime / audio.duration) * 1000);
-    state.time = audio.currentTime; if (!audio.paused) save();
+tracks.forEach((track,i)=>{
+  const div = document.createElement('div');
+  div.className = 'track';
+  div.innerHTML = `<div class="meta"><h2>${track.title}</h2><p>${track.artist}</p></div>`;
+  div.addEventListener('click', ()=>{
+    current = i;
+    loadTrack(current);
   });
-  audio.addEventListener('loadedmetadata', () => { durationEl.textContent = fmt(audio.duration); });
-  audio.addEventListener('play', syncPlayButton);
-  audio.addEventListener('pause', syncPlayButton);
-  audio.addEventListener('ended', () => { state.time = 0; save(); state.loop ? audio.play() : next(); });
-  audio.addEventListener('error', () => { nowSrc.textContent = '⚠️ Error loading audio. Check URL / CORS.'; });
+  playlistEl.appendChild(div);
+});
 
-  seek.oninput = e => {
-    if (isFinite(audio.duration)) {
-      audio.currentTime = (seek.value/1000) * audio.duration;
-    }
-  };
-  vol.oninput = e => { audio.volume = Number(vol.value); state.volume = audio.volume; save(); };
-  muteBtn.onclick = () => { audio.muted = !audio.muted; muteBtn.textContent = audio.muted ? '🔇 Unmute' : '🔈 Mute'; };
-  rate.onchange = () => { state.rate = Number(rate.value); audio.playbackRate = state.rate; save(); };
-  loopBtn.onclick = () => { state.loop = !state.loop; audio.loop = state.loop; loopBtn.setAttribute('aria-pressed', String(state.loop)); save(); };
-  shuffleBtn.onclick = () => { state.shuffle = !state.shuffle; shuffleBtn.setAttribute('aria-pressed', String(state.shuffle)); save(); };
-  q.oninput = renderList;
-  persist.onchange = () => { state.persist = persist.checked; if (!persist.checked) localStorage.removeItem(STATE_KEY); else save(); };
-
-  // Keyboard shortcuts
-  document.addEventListener('keydown', (e) => {
-    if (e.target.matches('input, textarea')) return;
-    if (e.code === 'Space'){ e.preventDefault(); playBtn.click(); }
-    if (e.key.toLowerCase() === 'k'){ next(); }
-    if (e.key.toLowerCase() === 'j'){ prev(); }
-    if (e.key.toLowerCase() === 'l'){ loopBtn.click(); }
-    if (e.key.toLowerCase() === 's'){ shuffleBtn.click(); }
-  });
-
-  // Init
-  renderList();
-  if (TRACKS.length){
-    restore();
-    load(state.index);
-    if (state.time && isFinite(state.time)) { audio.currentTime = state.time; }
-    setNowPlaying(state.index);
-  } else {
-    nowSrc.textContent = 'Add your tracks in the TRACKS array (see code).';
-    downloadBtn.disabled = true;
-  }
-
-  // Helpful: If the browser blocks autoplay, sync button label.
-  syncPlayButton();
-  </script>
+loadTrack(current);
+</script>
 </body>
 </html>
