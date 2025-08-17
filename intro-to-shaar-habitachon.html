@@ -1,56 +1,274 @@
-<table border="1">
-  <thead>
-    <tr>
-      <th>Section</th>
-      <th>Part</th>
-      <th>Link</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Intro to Sha'ar HaBitachon</td>
-      <td>Part 1</td>
-      <td><a href="https://drive.google.com/file/d/1OXTKGFiVQgaTAYEr1BHDtQxBTQjXA9Mo/view?usp=drive_link" target="_blank">Listen</a></td>
-    </tr>
-    <tr>
-      <td>Intro to Sha'ar HaBitachon</td>
-      <td>Part 2</td>
-      <td><a href="https://drive.google.com/file/d/1TIUf6bteMy-5PPoIt8mDkeBoZdzFy4n5/view?usp=drive_link" target="_blank">Listen</a></td>
-    </tr>
-    <tr>
-      <td>Intro to Sha'ar HaBitachon</td>
-      <td>Part 3</td>
-      <td><a href="https://drive.google.com/file/d/1axUuXa-9DR7SHvumT25DTbgZx33E_uYH/view?usp=drive_link" target="_blank">Listen</a></td>
-    </tr>
-    <tr>
-      <td>Intro to Sha'ar HaBitachon</td>
-      <td>Part 4</td>
-      <td><a href="https://drive.google.com/file/d/1pEVEqT42PlI0VITAEsOB7VkbIiaJPeTt/view?usp=drive_link" target="_blank">Listen</a></td>
-    </tr>
-    <tr>
-      <td>Intro to Sha'ar HaBitachon</td>
-      <td>Part 5</td>
-      <td><a href="https://drive.google.com/file/d/17quXhf5l8cEj1mvgzUMvWvcQANvsG0dA/view?usp=drive_link" target="_blank">Listen</a></td>
-    </tr>
-    <tr>
-      <td>Intro to Sha'ar HaBitachon</td>
-      <td>Part 6</td>
-      <td><a href="https://drive.google.com/file/d/1InRx3OmzK-biGANpsQXm6L3o3y29QelU/view?usp=drive_link" target="_blank">Listen</a></td>
-    </tr>
-    <tr>
-      <td>Intro to Sha'ar HaBitachon</td>
-      <td>Part 7</td>
-      <td><em>Link not provided</em></td>
-    </tr>
-    <tr>
-      <td>Intro to Sha'ar HaBitachon</td>
-      <td>Part 8</td>
-      <td><a href="https://drive.google.com/file/d/16ymiV9Zjc80GOrDXti8ubaj9cp7q1JrR/view?usp=drive_link" target="_blank">Listen</a></td>
-    </tr>
-    <tr>
-      <td>Intro to Sha'ar HaBitachon</td>
-      <td>Part 9</td>
-      <td><a href="https://drive.google.com/file/d/13dyefmpXMrSJQTbSwfnHr1A09o1Ed0rB/view?usp=drive_link" target="_blank">Listen</a></td>
-    </tr>
-  </tbody>
-</table>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Sha'ar HaBitachon • Playlist</title>
+  <style>
+    /* Theme matched to your site’s light/beige look */
+    :root{
+      --bg:#fdfaf6;
+      --paper:#ffffff;
+      --ink:#333;
+      --muted:#6b6b6b;
+      --accent:#e8e1d4;
+      --accent-strong:#d7cfbf;
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Georgia, 'Times New Roman', serif;
+      background:var(--bg);
+      color:var(--ink);
+    }
+    header{
+      background:var(--accent);
+      padding:20px;
+      text-align:center;
+      box-shadow:0 2px 4px rgba(0,0,0,.06);
+    }
+    header h1{margin:0;font-size:1.6rem}
+    main{
+      max-width:980px;
+      margin:24px auto;
+      padding:0 16px 40px;
+    }
+    .player{
+      background:var(--paper);
+      border:1px solid var(--accent-strong);
+      border-radius:var(--radius);
+      padding:16px;
+      box-shadow:0 2px 8px rgba(0,0,0,.04);
+    }
+    .now{
+      display:flex;
+      align-items:flex-start;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    .cover{
+      width:96px;height:96px;border-radius:12px;
+      background:linear-gradient(135deg, var(--accent), var(--accent-strong));
+      display:flex;align-items:center;justify-content:center;
+      font-weight:bold;
+      user-select:none;
+    }
+    .meta{flex:1;min-width:220px}
+    .title{font-size:1.1rem;margin:0 0 4px}
+    .chapter{color:var(--muted);margin:0 0 8px}
+    .controls{
+      display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0 8px;
+    }
+    .controls button{
+      border:1px solid var(--accent-strong);
+      background:#fff;
+      border-radius:999px;
+      padding:8px 14px;
+      cursor:pointer;
+      font-family:inherit;
+    }
+    .controls button:hover{background:var(--accent)}
+    .bars{
+      display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    }
+    .range{width:280px;max-width:100%}
+    .time{font-variant-numeric:tabular-nums;color:var(--muted)}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:16px;
+      margin-top:16px;
+    }
+    @media (max-width:800px){ .grid{grid-template-columns:1fr} }
+    .playlist{
+      background:var(--paper);
+      border:1px solid var(--accent-strong);
+      border-radius:var(--radius);
+      overflow:hidden;
+    }
+    .playlist h2{
+      margin:0;padding:12px 14px;background:var(--accent);font-size:1rem;
+      border-bottom:1px solid var(--accent-strong);
+    }
+    .tracks{max-height:420px;overflow:auto}
+    .track{
+      display:flex;gap:10px;align-items:center;justify-content:space-between;
+      padding:10px 14px;border-bottom:1px solid var(--accent-strong);cursor:pointer;
+    }
+    .track:last-child{border-bottom:none}
+    .track:hover{background:#faf7f1}
+    .track.active{background:#f3eee4}
+    .track .left{display:flex;gap:10px;align-items:center;min-width:0}
+    .num{width:28px;text-align:right;color:var(--muted)}
+    .name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:420px}
+    .dur{color:var(--muted);font-variant-numeric:tabular-nums}
+    footer{margin-top:24px;color:var(--muted);text-align:center}
+    a.back{display:inline-block;margin-top:8px}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Sha'ar HaBitachon — Rebbetzin Devorah Eisenbach</h1>
+  </header>
+
+  <main>
+    <div class="player" role="region" aria-label="Audio player">
+      <div class="now">
+        <div class="cover" aria-hidden="true">BH</div>
+        <div class="meta">
+          <h2 class="title" id="nowTitle">Intro • Part 1</h2>
+          <p class="chapter" id="nowChapter">Intro to Sha'ar HaBitachon</p>
+          <div class="controls" aria-label="Playback controls">
+            <button id="prevBtn" aria-label="Previous">⏮ Prev</button>
+            <button id="playBtn" aria-label="Play/Pause">▶︎ Play</button>
+            <button id="nextBtn" aria-label="Next">⏭ Next</button>
+          </div>
+          <div class="bars">
+            <input id="seek" class="range" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek"/>
+            <span class="time" id="time">0:00 / 0:00</span>
+            <label>
+              <span class="sr-only">Volume</span>
+              <input id="vol" type="range" min="0" max="1" step="0.01" value="1" aria-label="Volume"/>
+            </label>
+          </div>
+          <audio id="audio" preload="metadata"></audio>
+        </div>
+      </div>
+
+      <div class="grid">
+        <section class="playlist" aria-label="Playlist">
+          <h2>Playlist</h2>
+          <div class="tracks" id="tracks"></div>
+        </section>
+
+        <section class="playlist" aria-label="Chapters">
+          <h2>Chapters</h2>
+          <div class="tracks">
+            <div class="track" tabindex="0">Intro to Sha'ar HaBitachon</div>
+            <div class="track" tabindex="0">1) What is Trust?</div>
+            <div class="track" tabindex="0">2) Trusting People — When & Why</div>
+            <div class="track" tabindex="0">3) Path to Complete Trust in Hashem</div>
+            <div class="track" tabindex="0">4) Things to Rely on Hashem For</div>
+            <div class="track" tabindex="0">5) One who Trusts vs. One who Doesn’t</div>
+            <div class="track" tabindex="0">6) Further Applications</div>
+            <div class="track" tabindex="0">7) What Can Harm Your Bitachon</div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <a class="back" href="Shiurim.html">← Back to Shiurim</a>
+    </footer>
+  </main>
+
+  <script>
+    // === Replace these with your real MP3 files in /audio ===
+    const TRACKS = [
+      { title: "Intro • Part 1", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar Bitachon - Part 1.mp3", duration: "10:03" },
+      { title: "Intro • Part 2", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar HaBitachon - Part 2.mp3", duration: "09:57" },
+      { title: "Intro • Part 3", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar HaBitachon - Part 3.mp3", duration: "11:12" },
+      { title: "Intro • Part 4", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar HaBitachon - Part 4.mp3", duration: "11:12" },
+      { title: "Intro • Part 5", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar HaBitachon - Part 5.mp3", duration: "11:12" },
+      { title: "Intro • Part 6", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar HaBitachon - Part 6.mp3", duration: "11:12" },
+      { title: "Intro • Part 7", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar HaBitachon-part7 .m4a", duration: "11:12" },
+      { title: "Intro • Part 8", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar HaBitachon - Part 8.mp3", duration: "11:12" },
+      // Add as many as you like...
+    ];
+
+    // === Elements
+    const audio = document.getElementById('audio');
+    const nowTitle = document.getElementById('nowTitle');
+    const nowChapter = document.getElementById('nowChapter');
+    const playBtn = document.getElementById('playBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const seek = document.getElementById('seek');
+    const vol = document.getElementById('vol');
+    const time = document.getElementById('time');
+    const tracksEl = document.getElementById('tracks');
+
+    // === Build playlist UI
+    TRACKS.forEach((t, i) => {
+      const row = document.createElement('div');
+      row.className = 'track';
+      row.setAttribute('role', 'button');
+      row.setAttribute('aria-label', `Play ${t.title}`);
+      row.innerHTML = `
+        <div class="left">
+          <div class="num">${(i+1).toString().padStart(2,'0')}</div>
+          <div class="name">${t.title}</div>
+        </div>
+        <div class="dur">${t.duration || ''}</div>
+      `;
+      row.addEventListener('click', () => load(i, true));
+      row.addEventListener('keypress', (e) => { if(e.key === 'Enter' || e.key === ' ') load(i, true); });
+      tracksEl.appendChild(row);
+    });
+
+    let index = 0;
+    let seeking = false;
+
+    function fmt(sec){
+      if(isNaN(sec) || !isFinite(sec)) return "0:00";
+      const m = Math.floor(sec/60);
+      const s = Math.floor(sec%60).toString().padStart(2,'0');
+      return `${m}:${s}`;
+    }
+
+    function highlight(){
+      [...document.querySelectorAll('.track')].forEach((el, i) => {
+        if(i === index) el.classList.add('active'); else el.classList.remove('active');
+      });
+    }
+
+    function load(i, autoplay=false){
+      index = (i + TRACKS.length) % TRACKS.length;
+      const t = TRACKS[index];
+      nowTitle.textContent = t.title;
+      nowChapter.textContent = t.chapter || "";
+      audio.src = t.src; // must be a direct .mp3 in your repo
+      audio.load();
+      highlight();
+      if(autoplay) audio.play().catch(()=>{ /* autoplay blocked is fine */ });
+      updateButtons();
+    }
+
+    function updateButtons(){
+      playBtn.textContent = audio.paused ? "▶︎ Play" : "⏸ Pause";
+      playBtn.setAttribute('aria-pressed', !audio.paused);
+    }
+
+    // Controls
+    playBtn.addEventListener('click', () => {
+      if(audio.paused) audio.play(); else audio.pause();
+    });
+    prevBtn.addEventListener('click', () => load(index-1, true));
+    nextBtn.addEventListener('click', () => load(index+1, true));
+    vol.addEventListener('input', () => audio.volume = +vol.value);
+
+    // Progress
+    audio.addEventListener('timeupdate', () => {
+      if(!seeking && audio.duration){
+        seek.value = (audio.currentTime / audio.duration) * 100;
+      }
+      time.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration || 0)}`;
+    });
+    seek.addEventListener('input', () => { seeking = true; });
+    seek.addEventListener('change', () => {
+      if(audio.duration){
+        audio.currentTime = (+seek.value/100) * audio.duration;
+      }
+      seeking = false;
+    });
+
+    audio.addEventListener('play', updateButtons);
+    audio.addEventListener('pause', updateButtons);
+    audio.addEventListener('ended', () => load(index+1, true));
+
+    // Initialize
+    load(0, false);
+  </script>
+</body>
+</html>
