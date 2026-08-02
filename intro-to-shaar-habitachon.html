@@ -164,18 +164,8 @@
   </main>
 
   <script>
-    // === Replace these with your real MP3 files in /audio ===
-    const TRACKS = [
-      { title: "Intro • Part 1", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar Bitachon - Part 1.mp3", duration: "10:03" },
-      { title: "Intro • Part 2", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar HaBitachon - Part 2.mp3", duration: "09:57" },
-      { title: "Intro • Part 3", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar HaBitachon - Part 3.mp3", duration: "11:12" },
-      { title: "Intro • Part 4", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar HaBitachon - Part 4.mp3", duration: "11:12" },
-      { title: "Intro • Part 5", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar HaBitachon - Part 5.mp3", duration: "11:12" },
-      { title: "Intro • Part 6", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar HaBitachon - Part 6.mp3", duration: "11:12" },
-      { title: "Intro • Part 7", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar HaBitachon-part7 .m4a", duration: "11:12" },
-      { title: "Intro • Part 8", chapter: "Intro to Sha'ar HaBitachon", src: "audio/Introduction to Sha'ar HaBitachon - Part 8.mp3", duration: "11:12" },
-      // Add as many as you like...
-    ];
+    // === Tracks are loaded dynamically from embedded_tracks.json (Google Drive links) ===
+    let TRACKS = [];
 
     // === Elements
     const audio = document.getElementById('audio');
@@ -189,23 +179,52 @@
     const time = document.getElementById('time');
     const tracksEl = document.getElementById('tracks');
 
-    // === Build playlist UI
-    TRACKS.forEach((t, i) => {
-      const row = document.createElement('div');
-      row.className = 'track';
-      row.setAttribute('role', 'button');
-      row.setAttribute('aria-label', `Play ${t.title}`);
-      row.innerHTML = `
-        <div class="left">
-          <div class="num">${(i+1).toString().padStart(2,'0')}</div>
-          <div class="name">${t.title}</div>
-        </div>
-        <div class="dur">${t.duration || ''}</div>
-      `;
-      row.addEventListener('click', () => load(i, true));
-      row.addEventListener('keypress', (e) => { if(e.key === 'Enter' || e.key === ' ') load(i, true); });
-      tracksEl.appendChild(row);
-    });
+    // Convert a Google Drive file id into a direct-stream URL
+    function driveDirectUrl(idOrUrl){
+      const match = idOrUrl.match(/[-\w]{25,}/); // extract the file id from any drive URL format
+      const id = match ? match[0] : idOrUrl;
+      return `https://drive.google.com/uc?export=download&id=${id}`;
+    }
+
+    // === Build playlist UI from an array of track objects
+    function renderPlaylist(){
+      tracksEl.innerHTML = '';
+      TRACKS.forEach((t, i) => {
+        const row = document.createElement('div');
+        row.className = 'track';
+        row.setAttribute('role', 'button');
+        row.setAttribute('aria-label', `Play ${t.title}`);
+        row.innerHTML = `
+          <div class="left">
+            <div class="num">${(i+1).toString().padStart(2,'0')}</div>
+            <div class="name">${t.title}</div>
+          </div>
+          <div class="dur">${t.duration || ''}</div>
+        `;
+        row.addEventListener('click', () => load(i, true));
+        row.addEventListener('keypress', (e) => { if(e.key === 'Enter' || e.key === ' ') load(i, true); });
+        tracksEl.appendChild(row);
+      });
+    }
+
+    // === Load track list from embedded_tracks.json (Google Drive links)
+    async function loadTracks(){
+      try{
+        const res = await fetch('embedded_tracks.json');
+        const data = await res.json();
+        TRACKS = data.map(t => ({
+          title: t.title,
+          chapter: t.artist || "Sha'ar HaBitachon",
+          src: driveDirectUrl(t.url),
+          duration: t.duration || ''
+        }));
+      }catch(err){
+        console.error('Could not load embedded_tracks.json', err);
+        nowTitle.textContent = 'Could not load playlist';
+      }
+      renderPlaylist();
+      if(TRACKS.length) load(0, false);
+    }
 
     let index = 0;
     let seeking = false;
@@ -224,6 +243,7 @@
     }
 
     function load(i, autoplay=false){
+      if(!TRACKS.length) return;
       index = (i + TRACKS.length) % TRACKS.length;
       const t = TRACKS[index];
       nowTitle.textContent = t.title;
@@ -268,7 +288,7 @@
     audio.addEventListener('ended', () => load(index+1, true));
 
     // Initialize
-    load(0, false);
+    loadTracks();
   </script>
 </body>
 </html>
