@@ -105,12 +105,30 @@
     .dur{color:var(--muted);font-variant-numeric:tabular-nums}
     footer{margin-top:24px;color:var(--muted);text-align:center}
     a.back{display:inline-block;margin-top:8px}
+    nav.site{
+      background:var(--accent-strong);
+      text-align:center;
+      padding:10px 0;
+    }
+    nav.site a{
+      color:#4b3f2f;
+      text-decoration:none;
+      margin:0 15px;
+      font-weight:bold;
+    }
+    nav.site a:hover{ text-decoration:underline; }
   </style>
 </head>
 <body>
   <header>
     <h1>Sha'ar HaBitachon — Rebbetzin Devorah Eisenbach</h1>
   </header>
+  <nav class="site">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="Shiurim.html">Shiurim</a>
+    <a href="contact.html">Contact</a>
+  </nav>
 
   <main>
     <div class="player" role="region" aria-label="Audio player">
@@ -138,14 +156,14 @@
         <section class="playlist" aria-label="Chapters">
           <h2>Chapters</h2>
           <div class="tracks">
-            <div class="track" tabindex="0">Intro to Sha'ar HaBitachon</div>
-            <div class="track" tabindex="0">1) What is Trust?</div>
-            <div class="track" tabindex="0">2) Trusting People — When & Why</div>
-            <div class="track" tabindex="0">3) Path to Complete Trust in Hashem</div>
-            <div class="track" tabindex="0">4) Things to Rely on Hashem For</div>
-            <div class="track" tabindex="0">5) One who Trusts vs. One who Doesn’t</div>
-            <div class="track" tabindex="0">6) Further Applications</div>
-            <div class="track" tabindex="0">7) What Can Harm Your Bitachon</div>
+            <div class="track" tabindex="0" data-chapter-match="Intro to Sha'ar HaBitachon">Intro to Sha'ar HaBitachon</div>
+            <div class="track" tabindex="0" data-chapter-match="Chapter 1">1) What is Trust?</div>
+            <div class="track" tabindex="0" data-chapter-match="Chapter 2">2) Trusting People — When & Why</div>
+            <div class="track" tabindex="0" data-chapter-match="Chapter 3">3) Path to Complete Trust in Hashem</div>
+            <div class="track" tabindex="0" data-chapter-match="Chapter 4">4) Things to Rely on Hashem For</div>
+            <div class="track" tabindex="0" data-chapter-match="Chapter 5">5) One who Trusts vs. One who Doesn’t</div>
+            <div class="track" tabindex="0" data-chapter-match="Chapter 6">6) Further Applications</div>
+            <div class="track" tabindex="0" data-chapter-match="Chapter 7">7) What Can Harm Your Bitachon</div>
           </div>
         </section>
       </div>
@@ -240,6 +258,20 @@
     // Controls
     prevBtn.addEventListener('click', () => load(index-1));
     nextBtn.addEventListener('click', () => load(index+1));
+
+    // Chapter shortcuts: jump to the first track whose title starts with this chapter
+    document.querySelectorAll('[data-chapter-match]').forEach(el => {
+      const jump = () => {
+        const prefix = el.getAttribute('data-chapter-match');
+        const i = TRACKS.findIndex(t => t.title.startsWith(prefix));
+        if(i >= 0){
+          load(i);
+          document.querySelector('.player')?.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+      };
+      el.addEventListener('click', jump);
+      el.addEventListener('keypress', (e) => { if(e.key === 'Enter' || e.key === ' ') jump(); });
+    });
 
     // Initialize
     loadTracks();
