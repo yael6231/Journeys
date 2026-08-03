@@ -11,58 +11,75 @@
       color: #333;
       margin: 0;
       padding: 0;
+      line-height: 1.6;
     }
 
     header {
-      background-color: #e8e1d4;
-      padding: 20px;
+      background: linear-gradient(180deg, #e8e1d4 0%, #ede7da 100%);
+      padding: 32px 20px;
       text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
 
     header h1 {
       margin: 0;
-      font-size: 2.5em;
-      color: #4b3f2f;
+      font-size: 2.4em;
+      color: #3f3527;
+      letter-spacing: .3px;
     }
 
     nav {
       background-color: #d5cbb0;
       text-align: center;
-      padding: 10px 0;
+      padding: 12px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,.05);
     }
 
     nav a {
       color: #4b3f2f;
       text-decoration: none;
-      margin: 0 15px;
+      margin: 0 16px;
       font-weight: bold;
+      padding-bottom: 2px;
+      border-bottom: 2px solid transparent;
+      transition: border-color .15s ease;
     }
 
     nav a:hover {
-      text-decoration: underline;
+      border-bottom: 2px solid #4b3f2f;
     }
 
     .content {
-      max-width: 800px;
-      margin: 30px auto;
+      max-width: 760px;
+      margin: 48px auto;
       padding: 0 20px;
+    }
+
+    .content h2 {
+      color: #3f3527;
+      font-size: 1.6em;
+      margin-bottom: .6em;
     }
 
     .shiur-list {
       background-color: #fffefb;
       border: 1px solid #ddd6c3;
       padding: 20px;
-      border-radius: 5px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.05);
     }
 
     .shiur-list a {
       display: block;
-      padding: 10px 0;
+      padding: 12px 10px;
+      margin: 0 -10px;
       color: #4b3f2f;
       text-decoration: none;
       font-size: 1.1em;
+      font-weight: bold;
       border-bottom: 1px solid #eee;
+      border-radius: 6px;
+      transition: background-color .12s ease;
     }
 
     .shiur-list a:last-child {
@@ -70,12 +87,12 @@
     }
 
     .shiur-list a:hover {
-      text-decoration: underline;
+      background-color: #f3eee0;
     }
 
     .shiur-list .soon {
       display: block;
-      padding: 10px 0;
+      padding: 12px 10px;
       color: #a8a190;
       font-size: 1.1em;
       border-bottom: 1px solid #eee;
@@ -89,7 +106,7 @@
 
     footer {
       text-align: center;
-      padding: 20px;
+      padding: 24px;
       background-color: #e8e1d4;
       color: #6d6354;
       font-size: 0.9em;

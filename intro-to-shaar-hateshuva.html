@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Sha'ar HaBitachon • Playlist</title>
+  <title>Sha'ar HaTeshuva • Playlist</title>
   <style>
     /* Theme matched to your site's light/beige look, refined for a more polished feel */
     :root{
@@ -143,7 +143,7 @@
 </head>
 <body>
   <header>
-    <h1>Sha'ar HaBitachon — Rebbetzin Devorah Eisenbach</h1>
+    <h1>Sha'ar HaTeshuva — Rebbetzin Devorah Eisenbach</h1>
   </header>
   <nav class="site">
     <a href="index.html">Home</a>
@@ -157,8 +157,8 @@
       <div class="now">
         <div class="cover" aria-hidden="true">BH</div>
         <div class="meta">
-          <h2 class="title" id="nowTitle">Intro • Part 1</h2>
-          <p class="chapter" id="nowChapter">Intro to Sha'ar HaBitachon</p>
+          <h2 class="title" id="nowTitle">Loading…</h2>
+          <p class="chapter" id="nowChapter">Sha'ar HaTeshuva</p>
           <div class="controls" aria-label="Playback controls">
             <button id="prevBtn" aria-label="Previous">⏮ Prev</button>
             <button id="nextBtn" aria-label="Next">⏭ Next</button>
@@ -177,16 +177,7 @@
 
         <section class="playlist" aria-label="Chapters">
           <h2>Chapters</h2>
-          <div class="tracks">
-            <div class="track" tabindex="0" data-chapter-match="Intro to Sha'ar HaBitachon">Intro to Sha'ar HaBitachon</div>
-            <div class="track" tabindex="0" data-chapter-match="Chapter 1">1) What is Trust?</div>
-            <div class="track" tabindex="0" data-chapter-match="Chapter 2">2) Trusting People — When & Why</div>
-            <div class="track" tabindex="0" data-chapter-match="Chapter 3">3) Path to Complete Trust in Hashem</div>
-            <div class="track" tabindex="0" data-chapter-match="Chapter 4">4) Things to Rely on Hashem For</div>
-            <div class="track" tabindex="0" data-chapter-match="Chapter 5">5) One who Trusts vs. One who Doesn’t</div>
-            <div class="track" tabindex="0" data-chapter-match="Chapter 6">6) Further Applications</div>
-            <div class="track" tabindex="0" data-chapter-match="Chapter 7">7) What Can Harm Your Bitachon</div>
-          </div>
+          <div class="tracks" id="chapterList"></div>
         </section>
       </div>
     </div>
@@ -197,7 +188,7 @@
   </main>
 
   <script>
-    // === Tracks are loaded dynamically from embedded_tracks.json (Google Drive links) ===
+    // === Tracks are loaded dynamically from embedded_tracks_teshuva.json (Google Drive links) ===
     let TRACKS = [];
 
     // === Elements
@@ -239,30 +230,66 @@
       });
     }
 
-    // === Load track list from embedded_tracks.json (Google Drive links)
+    // === Load track list from embedded_tracks_teshuva.json (Google Drive links)
+    const chapterListEl = document.getElementById('chapterList');
+
     async function loadTracks(){
       try{
-        const res = await fetch('embedded_tracks.json');
+        const res = await fetch('embedded_tracks_teshuva.json');
         const data = await res.json();
         TRACKS = data.map(t => ({
           title: t.title,
-          chapter: t.artist || "Sha'ar HaBitachon",
+          chapter: t.artist || "Sha'ar HaTeshuva",
           embed: driveEmbedUrl(t.url),
           duration: t.duration || ''
         }));
       }catch(err){
-        console.error('Could not load embedded_tracks.json', err);
+        console.error('Could not load embedded_tracks_teshuva.json', err);
         nowTitle.textContent = 'Could not load playlist';
         return;
       }
       renderPlaylist();
+      renderChapterShortcuts();
       if(TRACKS.length) load(0);
+    }
+
+    // Build the "Chapters" shortcut list directly from the real section names
+    // in the data (Introduction, Chapter 1, Chapter 2, ...) rather than
+    // guessing topic descriptions we have no way to verify.
+    function renderChapterShortcuts(){
+      const seen = new Set();
+      const chapters = [];
+      TRACKS.forEach(t => {
+        const match = t.title.match(/^(Introduction to Sha'ar HaTeshuva|Chapter \d+: Sha'ar HaTeshuva)/);
+        if(match && !seen.has(match[1])){
+          seen.add(match[1]);
+          chapters.push(match[1]);
+        }
+      });
+      chapterListEl.innerHTML = '';
+      chapters.forEach(label => {
+        const row = document.createElement('div');
+        row.className = 'track';
+        row.tabIndex = 0;
+        row.textContent = label.replace("Sha'ar HaTeshuva", '').trim() || label;
+        row.addEventListener('click', () => jumpToChapter(label));
+        row.addEventListener('keypress', (e) => { if(e.key === 'Enter' || e.key === ' ') jumpToChapter(label); });
+        chapterListEl.appendChild(row);
+      });
+    }
+
+    function jumpToChapter(prefix){
+      const i = TRACKS.findIndex(t => t.title.startsWith(prefix));
+      if(i >= 0){
+        load(i);
+        document.querySelector('.player')?.scrollIntoView({behavior:'smooth', block:'start'});
+      }
     }
 
     let index = 0;
 
     function highlight(){
-      [...document.querySelectorAll('.track')].forEach((el, i) => {
+      [...tracksEl.querySelectorAll('.track')].forEach((el, i) => {
         if(i === index) el.classList.add('active'); else el.classList.remove('active');
       });
     }
@@ -280,20 +307,6 @@
     // Controls
     prevBtn.addEventListener('click', () => load(index-1));
     nextBtn.addEventListener('click', () => load(index+1));
-
-    // Chapter shortcuts: jump to the first track whose title starts with this chapter
-    document.querySelectorAll('[data-chapter-match]').forEach(el => {
-      const jump = () => {
-        const prefix = el.getAttribute('data-chapter-match');
-        const i = TRACKS.findIndex(t => t.title.startsWith(prefix));
-        if(i >= 0){
-          load(i);
-          document.querySelector('.player')?.scrollIntoView({behavior:'smooth', block:'start'});
-        }
-      };
-      el.addEventListener('click', jump);
-      el.addEventListener('keypress', (e) => { if(e.key === 'Enter' || e.key === ' ') jump(); });
-    });
 
     // Initialize
     loadTracks();

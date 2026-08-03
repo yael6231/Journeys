@@ -11,81 +11,91 @@
       color: #333;
       margin: 0;
       padding: 0;
+      line-height: 1.6;
     }
 
     header {
-      background-color: #e8e1d4;
-      padding: 20px;
+      background: linear-gradient(180deg, #e8e1d4 0%, #ede7da 100%);
+      padding: 32px 20px;
       text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
 
     header h1 {
       margin: 0;
-      font-size: 2.5em;
-      color: #4b3f2f;
+      font-size: 2.4em;
+      color: #3f3527;
+      letter-spacing: .3px;
+    }
+
+    header p.tagline {
+      margin: 10px 0 0;
+      color: #6d6354;
+      font-style: italic;
+      font-size: 1.05em;
     }
 
     nav {
       background-color: #d5cbb0;
       text-align: center;
-      padding: 10px 0;
+      padding: 12px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,.05);
     }
 
     nav a {
       color: #4b3f2f;
       text-decoration: none;
-      margin: 0 15px;
+      margin: 0 16px;
       font-weight: bold;
+      padding-bottom: 2px;
+      border-bottom: 2px solid transparent;
+      transition: border-color .15s ease;
     }
 
     nav a:hover {
-      text-decoration: underline;
-    }
-
-    .dropdown {
-      display: inline-block;
-      position: relative;
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #f9f9f9;
-      min-width: 240px;
-      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-      z-index: 1;
-    }
-
-    .dropdown-content a {
-      color: #333;
-      padding: 10px 16px;
-      display: block;
-      text-decoration: none;
-    }
-
-    .dropdown-content a:hover {
-      background-color: #eee;
-    }
-
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-
-    .dropdown > a {
-      color: #4b3f2f;
-      cursor: pointer;
+      border-bottom: 2px solid #4b3f2f;
     }
 
     .content {
-      max-width: 800px;
-      margin: 30px auto;
+      max-width: 760px;
+      margin: 48px auto;
       padding: 0 20px;
+    }
+
+    .content h2 {
+      color: #3f3527;
+      font-size: 1.6em;
+      margin-bottom: .6em;
+    }
+
+    .content p {
+      font-size: 1.08em;
+    }
+
+    .cta {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 12px 26px;
+      background-color: #8a7554;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 999px;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,.12);
+      transition: background-color .15s ease, transform .1s ease;
+    }
+
+    .cta:hover {
+      background-color: #6f5d42;
+    }
+
+    .cta:active {
+      transform: scale(0.97);
     }
 
     footer {
       text-align: center;
-      padding: 20px;
+      padding: 24px;
       background-color: #e8e1d4;
       color: #6d6354;
       font-size: 0.9em;
@@ -104,13 +114,14 @@
 
   <header>
     <h1>Life Journey with the Chovos Halevavos</h1>
+    <p class="tagline">Timeless wisdom, made practical for everyday life</p>
   </header>
 
   <nav>
     <a href="index.html">Home</a>
     <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
     <a href="Shiurim.html">Shiurim</a>
+    <a href="contact.html">Contact</a>
   </nav>
 
   <div class="content">
@@ -119,8 +130,9 @@
       Welcome to the Life Journey with the Chovos Halevavos — a site dedicated to exploring the timeless teachings of Rabbeinu Bachya. Through shiurim, reflections, and guided learning, we aim to make the wisdom of the Chovos Halevavos practical and accessible in your daily spiritual journey.
     </p>
     <p>
-      Start exploring the Sha'ar by listening to a set of shiurim in 10 minute segments with Rebbetzin Devorah Eisenbach. A World reknown lecturer, author and expert on the Chovos Halevavos. <a href="intro-to-shaar-habitachon.html">Sha'ar HaBitachon</a> or browse other Sha'arim using the menu above.
+      Start exploring the Sha'ar by listening to a set of shiurim in 10 minute segments with Rebbetzin Devorah Eisenbach — a world-renowned lecturer, author, and expert on the Chovos Halevavos.
     </p>
+    <a class="cta" href="intro-to-shaar-habitachon.html">Listen to Sha'ar HaBitachon →</a>
   </div>
 
   <footer>

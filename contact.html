@@ -11,60 +11,73 @@
       color: #333;
       margin: 0;
       padding: 0;
+      line-height: 1.6;
     }
 
     header {
-      background-color: #e8e1d4;
-      padding: 20px;
+      background: linear-gradient(180deg, #e8e1d4 0%, #ede7da 100%);
+      padding: 32px 20px;
       text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
 
     header h1 {
       margin: 0;
-      font-size: 2.5em;
-      color: #4b3f2f;
+      font-size: 2.4em;
+      color: #3f3527;
+      letter-spacing: .3px;
     }
 
     nav {
       background-color: #d5cbb0;
       text-align: center;
-      padding: 10px 0;
+      padding: 12px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,.05);
     }
 
     nav a {
       color: #4b3f2f;
       text-decoration: none;
-      margin: 0 15px;
+      margin: 0 16px;
       font-weight: bold;
+      padding-bottom: 2px;
+      border-bottom: 2px solid transparent;
+      transition: border-color .15s ease;
     }
 
     nav a:hover {
-      text-decoration: underline;
+      border-bottom: 2px solid #4b3f2f;
     }
 
     .content {
-      max-width: 800px;
-      margin: 30px auto;
+      max-width: 760px;
+      margin: 48px auto;
       padding: 0 20px;
     }
 
-    h2 {
-      color: #4b3f2f;
-      margin-bottom: 20px;
+    .content h2 {
+      color: #3f3527;
+      font-size: 1.6em;
+      margin-bottom: .6em;
+    }
+
+    .content p {
+      font-size: 1.08em;
     }
 
     form {
       background-color: #fffefb;
       border: 1px solid #ddd6c3;
-      padding: 20px;
-      border-radius: 5px;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.05);
     }
 
     label {
       display: block;
       margin-top: 15px;
       font-weight: bold;
+      color: #3f3527;
     }
 
     input, textarea {
@@ -72,28 +85,42 @@
       padding: 10px;
       margin-top: 5px;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 6px;
       font-size: 1em;
+      font-family: inherit;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #8a7554;
+      box-shadow: 0 0 0 3px rgba(138,117,84,.15);
     }
 
     button {
       margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #c4b79b;
+      padding: 11px 26px;
+      background-color: #8a7554;
       border: none;
       color: #fff;
       font-size: 1em;
+      font-weight: bold;
       cursor: pointer;
-      border-radius: 4px;
+      border-radius: 999px;
+      transition: background-color .15s ease, transform .1s ease;
     }
 
     button:hover {
-      background-color: #b3a385;
+      background-color: #6f5d42;
+    }
+
+    button:active {
+      transform: scale(0.97);
     }
 
     footer {
       text-align: center;
-      padding: 20px;
+      padding: 24px;
       background-color: #e8e1d4;
       color: #6d6354;
       font-size: 0.9em;
